@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404</title>
+  <style>
+    :root {
+      --blue: #2f8cff;
+      --blue-dark: #2b7de0;
+      --blue-light: #8fb9ff;
+      --white: #fff;
+      --nav-text: #2d7fe0;
+      --card-bg: rgba(255,255,255,0.16);
+    }
+
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #2e8bff 0%, #67a7ff 52%, #a9c8ff 100%);
+    }
+
+    .page {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 12% 93%, rgba(255,255,255,.18) 0 1px, transparent 1px),
+        radial-gradient(circle at 78% 21%, rgba(255,255,255,.18) 0 1px, transparent 1px),
+        linear-gradient(180deg, #2f8cff 0%, #61a4ff 56%, #a8c7ff 100%);
+    }
+
+    .bg-404 {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: min(70vw, 980px);
+      font-weight: 700;
+      line-height: 0.85;
+      letter-spacing: -0.08em;
+      color: rgba(255,255,255,0.42);
+      user-select: none;
+      pointer-events: none;
+      transform: translateY(-1%);
+    }
+
+    .topbar {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      top: 18px;
+      display: flex;
+      align-items: flex-start;
+      gap: 18px;
+      z-index: 5;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 170px;
+      color: #fff;
+      opacity: .95;
+      text-decoration: none;
+      flex: 0 0 auto;
+    }
+
+    .logo-placeholder {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      background: rgba(255,255,255,.22);
+      border: 2px solid rgba(255,255,255,.55);
+      display: grid;
+      place-items: center;
+      color: rgba(255,255,255,.9);
+      font-size: 10px;
+      line-height: 1.05;
+      text-align: center;
+      padding: 6px;
+    }
+
+    .logo-text {
+      font-size: 31px;
+      font-weight: 500;
+      line-height: 1;
+      letter-spacing: .2px;
+    }
+
+    .nav {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex: 1;
+      padding-top: 12px;
+    }
+
+    .nav a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      height: 42px;
+      padding: 0 30px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.98);
+      color: var(--nav-text);
+      text-decoration: none;
+      font-size: 24px;
+      line-height: 1;
+      box-shadow:
+        0 1px 0 rgba(0,0,0,.08),
+        inset 0 0 0 3px rgba(88,158,255,.55);
+      white-space: nowrap;
+    }
+
+    .card {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -39%);
+      width: min(390px, calc(100vw - 34px));
+      height: min(520px, calc(100vh - 150px));
+      border-radius: 36px;
+      background: var(--card-bg);
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 18px 20px 22px;
+      backdrop-filter: blur(1px);
+    }
+
+    .seal {
+      width: min(275px, 74vw);
+      aspect-ratio: 1 / 1;
+      margin-top: 14px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 46% 27%, #d2d2d2 0 11%, transparent 11.5%),
+        radial-gradient(circle at 50% 48%, #d9d9d9 0 54%, #cfcfcf 55% 100%);
+      box-shadow: inset 0 -18px 28px rgba(0,0,0,.05);
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+
+    .seal::before {
+      content: "ТЮЛЕНЬ";
+      color: rgba(90,90,90,.55);
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      transform: translateY(8px);
+    }
+
+    .message {
+      margin-top: 18px;
+      color: rgba(255,255,255,.92);
+      font-size: 26px;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .btn {
+      margin-top: 18px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 22px;
+      border-radius: 999px;
+      background: #1e7df5;
+      color: #fff;
+      text-decoration: none;
+      font-size: 24px;
+      line-height: 1;
+      box-shadow: 0 10px 22px rgba(0,0,0,.12);
+    }
+
+    .btn .arr {
+      font-size: 28px;
+      line-height: 1;
+      transform: translateY(-1px);
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      pointer-events: none;
+      z-index: 2;
+      opacity: .85;
+      background:
+        radial-gradient(circle, rgba(255,255,255,.95) 0 2px, transparent 3px) center/100% 100% no-repeat;
+      filter: drop-shadow(0 0 7px rgba(255,255,255,.85));
+    }
+
+    .sparkle.one { left: 68%; top: 15%; transform: scale(.55); }
+    .sparkle.two { left: 70%; top: 20%; transform: scale(.36); opacity: .55; }
+    .sparkle.three { left: 23%; top: 72%; transform: scale(.42); opacity: .7; }
+    .sparkle.four { left: 29%; top: 64%; transform: scale(.28); opacity: .55; }
+
+    @media (max-width: 900px) {
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav {
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 2px;
+      }
+
+      .nav a {
+        font-size: 18px;
+        height: 38px;
+        padding: 0 18px;
+      }
+
+      .logo-text {
+        font-size: 24px;
+      }
+
+      .card {
+        width: min(340px, calc(100vw - 24px));
+      }
+
+      .message {
+        font-size: 21px;
+      }
+
+      .btn {
+        font-size: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="bg-404">404</div>
+
+    <header class="topbar">
+      <a class="logo" href="../home/index.html">
+        <div class="logo-placeholder">LOGO<br>PLACEHOLDER</div>
+        <div class="logo-text">Spalara</div>
+      </a>
+
+      <nav class="nav" aria-label="Основная навигация">
+        <a href="index.html">заболевания</a>
+        <a href="index.html">диагностика</a>
+        <a href="index.html">врачи</a>
+        <a href="index.html">профиль</a>
+      </nav>
+    </header>
+
+    <span class="sparkle one"></span>
+    <span class="sparkle two"></span>
+    <span class="sparkle three"></span>
+    <span class="sparkle four"></span>
+
+    <section class="card" aria-label="Ошибка 404">
+      <div class="seal"></div>
+      <div class="message">Ой, что-то пошло не так!</div>
+      <a class="btn" href="../home/index.html"><span class="arr">←</span><span>на главную</span></a>
+    </section>
+  </main>
+</body>
+</html>
