@@ -1,0 +1,163 @@
+.why-carousel-wrapper {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  position: relative;
+  /* Запас по вертикали: обрезка по padding-box, иначе при scale карточки режутся ровной линией */
+  padding: 40px 0;
+  min-width: 0;
+  box-sizing: border-box;
+  /* К краям вьюпорта содержимое плавно гаснет — без резкой «линии» обрезки */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.2) 5%,
+    rgba(0, 0, 0, 0.65) 12%,
+    #000 22%,
+    #000 78%,
+    rgba(0, 0, 0, 0.65) 88%,
+    rgba(0, 0, 0, 0.2) 95%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(0, 0, 0, 0.2) 5%,
+    rgba(0, 0, 0, 0.65) 12%,
+    #000 22%,
+    #000 78%,
+    rgba(0, 0, 0, 0.65) 88%,
+    rgba(0, 0, 0, 0.2) 95%,
+    transparent 100%
+  );
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+
+/* Пауза только при наведении на карточку, а не на всю полосу */
+.why-carousel-wrapper:has(.why-carousel-card:hover) .why-carousel-track {
+  animation-play-state: paused;
+}
+
+.why-carousel-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: why-carousel-scroll 250s linear infinite;
+}
+
+.why-carousel-card {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  width: 220px;
+  height: 260px;
+  padding: 14px 16px;
+  text-align: left;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  background: #ffffff;
+  border-radius: 14px;
+  border: 1px solid rgba(93, 45, 121, 0.22);
+  box-shadow: 0 10px 28px rgba(55, 28, 120, 0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+  transition: transform 0.25s ease;
+  transform-origin: center center;
+  backface-visibility: hidden;
+  position: relative;
+}
+
+.why-carousel-card:hover {
+  transform: scale(1.12);
+  z-index: 1;
+}
+
+.why-carousel-card-title {
+  margin: 0;
+  min-width: 0;
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1.25;
+  color: #5f1c87;
+  flex-shrink: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow-wrap: break-word;
+}
+
+.why-carousel-card-body {
+  margin: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  min-width: 0;
+  width: 100%;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: rgba(36, 48, 86, 0.82);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 8;
+  line-clamp: 8;
+  overflow-wrap: break-word;
+  /* Высота ровно 8 строк — многоточие на последней строке, а не «на строке раньше» из-за лишнего места во flex */
+  max-height: calc(0.88rem * 1.45 * 8);
+  max-height: calc(8 * 1lh);
+}
+
+@keyframes why-carousel-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .why-carousel-track {
+    animation: none;
+  }
+
+  .why-carousel-wrapper {
+    overflow-x: auto;
+    overflow-y: visible;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .why-carousel-wrapper::-webkit-scrollbar {
+    display: none;
+    height: 0;
+  }
+
+  .why-carousel-card {
+    scroll-snap-align: start;
+  }
+
+  .why-carousel-wrapper:has(.why-carousel-card:hover) .why-carousel-track {
+    animation-play-state: running;
+  }
+
+  .why-carousel-card:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .why-carousel-card:hover {
+    transform: scale(1.06);
+  }
+}

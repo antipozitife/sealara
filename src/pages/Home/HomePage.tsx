@@ -1,8 +1,9 @@
-import React, { useEffect, useId, useRef, useState } from "react";
+import React, { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "../../components/header/Header";
 import sealWave from "../../assets/seal-wave.png";
 import "../../styles/layout-shell.css";
+import { WhyDiseasesCarousel } from "./WhyDiseasesCarousel";
 import "./home.css";
 
 /** Potrace: два подпути в одном `d` дают «дырку» при одной заливке (nonzero). Обводка — полный путь, заливка — только внешний контур. */
@@ -11,10 +12,47 @@ const CLOUD_PATH_FULL =
 
 const CLOUD_PATH_OUTER = CLOUD_PATH_FULL.slice(0, CLOUD_PATH_FULL.indexOf(" m7595 -148 "));
 
+const HOME_SCROLL_KEY = "sealara-home-scroll-y";
+
 export const HomePage = () => {
   const cloudFilterId = `speechCloudFi${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   const speechBubbleRef = useRef<HTMLDivElement>(null);
   const [speechBubbleVisible, setSpeechBubbleVisible] = useState(false);
+
+  useLayoutEffect(() => {
+    if (typeof window === "undefined") return;
+    const raw = sessionStorage.getItem(HOME_SCROLL_KEY);
+    if (raw === null) return;
+    const y = Number.parseInt(raw, 10);
+    if (!Number.isFinite(y) || y < 0) return;
+    const apply = () => window.scrollTo(0, y);
+    apply();
+    requestAnimationFrame(() => {
+      requestAnimationFrame(apply);
+    });
+  }, []);
+
+  /* Сохранять в layout cleanup: иначе после перехода на другую страницу useEffect сработает уже при scrollY === 0 */
+  useLayoutEffect(() => {
+    if (typeof window === "undefined") return;
+    return () => {
+      sessionStorage.setItem(HOME_SCROLL_KEY, String(window.scrollY));
+    };
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let raf = 0;
+    const persist = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        sessionStorage.setItem(HOME_SCROLL_KEY, String(window.scrollY));
+      });
+    };
+    window.addEventListener("scroll", persist, { passive: true });
+    return () => window.removeEventListener("scroll", persist);
+  }, []);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -135,31 +173,14 @@ export const HomePage = () => {
         <section className="why">
           <h2>Почему стоит выбрать именно меня?</h2>
 
-          <div className="why-grid">
+          <div className="why-layout">
             <div className="why-visual">
-              <div className="blob">
-                <div className="image-placeholder medium" />
-              </div>
+              <div className="blob blob--why" aria-hidden="true" />
             </div>
 
-            <h3 className="why-lead-subtitle">1. Большая база данных заболеваний</h3>
-
-            <div className="why-card mini why-card--lead">
-              <p>
-                Заглушка под текстовый блок или дополнительные карточки с перечнем симптомов и заболеваний.
-              </p>
-            </div>
-
-            <div className="why-card feature">
-              <h3>Акустическая травма</h3>
-              <p>
-                Заглушка под описательный блок. Сюда можно вставить карточку с заболеванием, симптомами или советами.
-              </p>
-            </div>
-
-            <div className="why-card mini">
-              <h3>Ампулодоз почек</h3>
-              <p>Ещё одна текстовая карточка-заглушка для вашей будущей структуры контента.</p>
+            <div className="why-carousel-column">
+              <h3 className="why-lead-subtitle">1. Большая база данных заболеваний</h3>
+              <WhyDiseasesCarousel />
             </div>
           </div>
         </section>
