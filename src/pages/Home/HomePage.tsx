@@ -347,8 +347,8 @@ export const HomePage = () => {
 
         <div className="footer-col right">
           <Link to="/not-found">по всем вопросам</Link>
-          <Link to="/not-found">писать на почту</Link>
-          <Link to="/not-found">antipiztle@icloud.com</Link>
+          <a href="mailto:antipiztle@icloud.com">писать на почту</a>
+          <a href="mailto:antipiztle@icloud.com">antipizitife@icloud.com</a>
         </div>
       </footer>
     </div>

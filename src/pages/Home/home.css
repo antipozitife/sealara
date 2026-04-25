@@ -188,6 +188,12 @@
       background-image: linear-gradient(180deg, #7c2db7, #5a189a);
       background-size: auto;
     }
+
+    .footer::before {
+      animation: none;
+      background-image: linear-gradient(90deg, #5a3a82, #7a4da8, #66408f);
+      background-size: auto;
+    }
   }
   
   .btn-secondary {
@@ -713,31 +719,64 @@
   }
   
   .footer {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr 1.5fr 1fr;
     gap: 16px;
-    padding: 24px 0 34px;
+    padding: clamp(36px, 4.5vw, 44px) 0 34px;
     align-items: start;
-    border-top: 2px solid rgba(255,255,255,0.35);
+    border-top: none;
+  }
+
+  /* Линия на всю ширину экрана — тот же перелив градиента, что у .btn-primary */
+  .footer::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: clamp(14px, 2.4vw, 22px);
+    width: 100vw;
+    height: 4px;
+    transform: translateX(-50%);
+    background-color: #5a189a;
+    background-image: linear-gradient(
+      120deg,
+      #4a148c 0%,
+      #5a189a 14%,
+      #7c2db7 28%,
+      #9d4edd 42%,
+      #c77dff 50%,
+      #9d4edd 58%,
+      #6d28d9 72%,
+      #5b21b6 86%,
+      #4c1d95 100%
+    );
+    background-size: 280% 280%;
+    background-position: 0% 50%;
+    animation: btn-primary-flow 7s ease-in-out infinite;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.1);
+    pointer-events: none;
   }
   
   .footer-col {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: clamp(18px, 2.6vw, 28px);
     font-weight: 600;
   }
   
   .footer-col a {
     color: rgba(36, 48, 86, 0.78);
+    font-size: clamp(1.08rem, 0.96rem + 0.55vw, 1.24rem);
+    line-height: 1.35;
   }
   
   .footer-note {
     background: rgba(126, 37, 168, 0.45);
     border: 1px solid rgba(255,255,255,0.3);
     border-radius: 14px;
-    padding: 16px 18px;
+    padding: clamp(18px, 2.2vw, 22px) clamp(20px, 2.5vw, 26px);
     text-align: center;
+    font-size: clamp(1.02rem, 0.9rem + 0.55vw, 1.2rem);
     line-height: 1.55;
     box-shadow: var(--shadow);
     color: #ffffff;
