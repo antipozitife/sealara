@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./footer.css";
 
-const CONTACT_EMAIL = "antipiztle@icloud.com";
+const CONTACT_EMAIL = "antipozitife@icloud.com";
 
 export const Footer = () => {
   return (
