@@ -584,31 +584,130 @@
   
   .cta {
     position: relative;
+    width: 100vw;
+    max-width: none;
+    margin-left: calc(50% - 50vw);
+    box-sizing: border-box;
     display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
-    gap: 22px;
+    grid-template-columns: minmax(140px, 0.38fr) minmax(0, 1fr);
+    gap: clamp(12px, 2.5vw, 28px);
     align-items: center;
-    padding: 40px 0 34px;
+    padding: 40px clamp(16px, 4vw, 28px) 34px;
+    overflow: visible;
   }
-  
-  .cta-card {
-    background: linear-gradient(180deg, rgba(120, 27, 161, 0.32), rgba(73, 114, 255, 0.34));
+
+  .cta > * {
+    min-width: 0;
+  }
+
+  .cta-figure {
+    --cta-circle: min(236px, 70vw);
+    position: relative;
+    z-index: 2;
+    align-self: center;
+    justify-self: end;
+    /* Заходим в колонку овала: иначе тюлень физически не пересекается с фиолетовым фоном */
+    width: min(calc(100% + clamp(100px, 22vw, 260px)), min(720px, 92vw));
+    height: min(560px, 88vw);
+    min-height: min(420px, 72vw);
+    margin: 0 clamp(-200px, -16vw, -100px) 0 0;
+    overflow: visible;
+  }
+
+  .cta-seal-circle {
+    position: absolute;
+    z-index: 0;
+    left: 50%;
+    top: 50%;
+    width: var(--cta-circle);
+    height: var(--cta-circle);
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    border: 1px solid rgba(255, 255, 255, 0.26);
+    box-shadow: 0 12px 28px rgba(55, 28, 120, 0.07);
+    pointer-events: none;
+  }
+
+  /*
+    Тюлень: +50% ширины вправо; +20% на овал; ширина 2.76×0.67×1.2×1.15; сдвиг влево через −clamp.
+  */
+  .cta-seal-happy {
+    display: block;
+    position: absolute;
+    z-index: 1;
+    left: 50%;
+    top: 50%;
+    width: calc(var(--cta-circle) * 2.76 * 0.67 * 1.2 * 1.15);
+    height: auto;
+    max-height: none;
+    transform: translate(calc(-50% + 20% + 50% - clamp(6px, 1.1vw, 14px) - clamp(88px, 10.8vw, 184px)), -48%);
+    transform-origin: 50% 68%;
+    object-fit: contain;
+    object-position: 50% 100%;
+    pointer-events: none;
+    filter: drop-shadow(0 10px 22px rgba(55, 28, 120, 0.14));
+  }
+
+  /* Оболочка почти не участвует в ширине грида — овал не раздвигает колонку */
+  .cta-oval-shell {
+    position: relative;
+    z-index: 1;
+    justify-self: end;
+    align-self: center;
+    width: 0;
+    min-width: 0;
+    height: clamp(280px, 48vw, 500px);
+    max-height: min(520px, 88vh);
+    overflow: visible;
+  }
+
+  /* Овал: ~⅓ ширины за правым краем экрана. Видимые ⅔ ≤ 50vw ⇒ ширина овала ≤ 75vw */
+  .cta-oval {
+    position: absolute;
+    z-index: 0;
+    top: 50%;
+    right: 0;
+    width: min(75vw, 1400px);
+    height: 100%;
+    max-height: min(520px, 88vh);
+    border-radius: 50%;
+    background: linear-gradient(180deg, rgba(120, 27, 161, 0.36), rgba(73, 114, 255, 0.38));
     border: 1px solid var(--border);
-    border-radius: 40px;
-    padding: 34px;
     box-shadow: var(--shadow);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    padding: clamp(28px, 4.5vw, 52px) clamp(22px, 4.5vw, 56px);
+    transform: translate(33.333%, -50%);
+  }
+
+  .cta-oval-inner {
+    box-sizing: border-box;
+    /* Чуть уже предыдущего варианта — всё ещё широко внутри овала */
+    width: min(88%, calc(46vw - 1.5rem));
+    max-width: min(680px, calc(46vw - 1rem));
+    margin-left: clamp(6px, 1.5vw, 24px);
+    margin-right: auto;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(20px, 3.2vw, 34px);
   }
-  
-  .cta-card h2 {
-    margin: 0 0 14px;
-    font-size: clamp(1.8rem, 3vw, 2.8rem);
+
+  .cta-oval h2 {
+    margin: 0;
+    font-size: clamp(1.65rem, 2.6vw, 2.65rem);
     color: #7a1e9d;
+    line-height: 1.12;
   }
-  
-  .cta-card p {
-    margin: 0 auto 22px;
-    max-width: 520px;
+
+  .cta-oval p {
+    margin: 0;
+    max-width: 100%;
     font-size: clamp(1.12rem, 0.95rem + 0.85vw, 1.42rem);
     line-height: 1.55;
   }
@@ -693,6 +792,42 @@
       align-items: flex-start;
       text-align: left;
     }
+
+    .cta-oval-shell {
+      justify-self: center;
+      width: min(92vw, 520px);
+      height: auto;
+      min-height: min(400px, 78vw);
+      max-height: none;
+    }
+
+    .cta-oval {
+      position: relative;
+      top: auto;
+      right: auto;
+      width: 100%;
+      height: auto;
+      min-height: inherit;
+      aspect-ratio: 1.08 / 1;
+      max-height: none;
+      transform: none;
+      margin-inline: auto;
+      padding: clamp(26px, 5vw, 42px) clamp(22px, 5vw, 36px);
+    }
+
+    .cta-oval-inner {
+      max-width: 100%;
+      width: 100%;
+      margin-left: 0;
+    }
+
+    .cta-figure {
+      justify-self: center;
+      width: min(92vw, 640px);
+      height: min(520px, 95vw);
+      min-height: min(380px, 85vw);
+      margin: 0 auto;
+    }
   }
   
   @media (max-width: 640px) {
@@ -735,6 +870,24 @@
     .speech-bubble-content small {
       font-size: clamp(0.88rem, 0.32rem + 2vw, 1.02rem);
     }
+
+    .cta-figure {
+      --cta-circle: min(198px, 64vw);
+      width: min(92vw, 520px);
+      height: min(440px, 120vw);
+      min-height: min(320px, 95vw);
+      margin: 0 auto;
+    }
+
+    .cta-seal-circle {
+      width: var(--cta-circle);
+      height: var(--cta-circle);
+    }
+
+    .cta-seal-happy {
+      width: calc(var(--cta-circle) * 2.76 * 0.67 * 1.2 * 1.15);
+      transform: translate(calc(-50% + 20% + 50% - 6px - clamp(76px, 9.2vw, 142px)), -44%);
+    }
   
     .image-placeholder.large {
       width: 210px;
@@ -755,8 +908,12 @@
       grid-template-columns: 1fr;
     }
   
-    .cta-card {
-      padding: 24px 18px;
+    .cta-oval-shell {
+      min-height: min(380px, 82vw);
+    }
+
+    .cta-oval {
+      padding: 22px 18px 28px;
     }
   }
 

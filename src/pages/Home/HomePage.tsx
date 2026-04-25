@@ -1,6 +1,7 @@
 import React, { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "../../components/header/Header";
+import sealHappy from "../../assets/seal-happy.png";
 import sealThinking from "../../assets/seal-thinking.png";
 import sealWave from "../../assets/seal-wave.png";
 import "../../styles/layout-shell.css";
@@ -313,15 +314,20 @@ export const HomePage = () => {
 
         <section className="cta">
           <div className="cta-figure">
-            <div className="image-placeholder seal" />
+            <div className="cta-seal-circle" aria-hidden="true" />
+            <img className="cta-seal-happy" src={sealHappy} alt="Радостный тюлень Sealara" />
           </div>
 
-          <div className="cta-card">
-            <h2>Готовы проверить своё здоровье?</h2>
-            <p>Начните диагностику прямо сейчас и получите персональные рекомендации от Sealara.</p>
-            <Link className="btn btn-primary" to="/not-found">
-              начать диагностику
-            </Link>
+          <div className="cta-oval-shell">
+            <div className="cta-oval">
+              <div className="cta-oval-inner">
+                <h2>Готовы проверить своё здоровье?</h2>
+                <p>Начните диагностику прямо сейчас и получите персональные рекомендации от Sealara.</p>
+                <Link className="btn btn-primary" to="/not-found">
+                  начать диагностику
+                </Link>
+              </div>
+            </div>
           </div>
         </section>
       </main>

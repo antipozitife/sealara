@@ -3,4 +3,5 @@
   margin: 0 auto;
   padding: 16px 25px 0;
   position: relative;
+  overflow-x: visible;
 }
