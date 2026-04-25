@@ -1,9 +1,10 @@
 import React, { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { Footer } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
-import sealHappy from "../../assets/seal-happy.png";
-import sealThinking from "../../assets/seal-thinking.png";
-import sealWave from "../../assets/seal-wave.png";
+import sealHappy from "../../images/seal-happy.png";
+import sealThinking from "../../images/seal-thinking.png";
+import sealWave from "../../images/seal-wave.png";
 import "../../styles/layout-shell.css";
 import { WhyDiseasesCarousel } from "./WhyDiseasesCarousel";
 import "./home.css";
@@ -332,25 +333,7 @@ export const HomePage = () => {
         </section>
       </main>
 
-      <footer className="footer">
-        <div className="footer-col">
-          <Link to="/not-found">энциклопедия болезней</Link>
-          <Link to="/not-found">диагностика болезней</Link>
-          <Link to="/not-found">сборник врачей</Link>
-          <Link to="/not-found">мой профиль</Link>
-        </div>
-
-        <div className="footer-note">
-          Информация, опубликованная на сайте, предназначена только для ознакомления и не заменяет консультацию с
-          медицинским специалистом. Обязательно проконсультируйтесь с врачом!
-        </div>
-
-        <div className="footer-col right">
-          <Link to="/not-found">по всем вопросам</Link>
-          <a href="mailto:antipiztle@icloud.com">писать на почту</a>
-          <a href="mailto:antipiztle@icloud.com">antipizitife@icloud.com</a>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 };

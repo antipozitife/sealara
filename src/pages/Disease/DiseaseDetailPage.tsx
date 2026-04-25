@@ -1,5 +1,6 @@
 import React, { useLayoutEffect, useMemo } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
+import { Footer } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
 import diseasesData from "../../data/diseases.json";
 import "../../styles/layout-shell.css";
@@ -88,6 +89,8 @@ export const DiseaseDetailPage: React.FC = () => {
           })}
         </article>
       </main>
+
+      <Footer />
     </div>
   );
 };

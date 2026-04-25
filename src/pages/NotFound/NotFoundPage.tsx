@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { Footer } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
 import "../../styles/layout-shell.css";
 import "./not-found.css";
@@ -27,6 +28,10 @@ export const NotFoundPage = () => {
             <span>на главную</span>
           </Link>
         </section>
+
+        <div className="shell">
+          <Footer />
+        </div>
       </div>
     </main>
   );

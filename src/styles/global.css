@@ -1,10 +1,99 @@
+:root {
+  --bg1: #8ac0ff;
+  --bg2: #5c8dff;
+  --bg3: #7d69e8;
+  --purple: #7b2aa6;
+  --purple-dark: #5f1c87;
+  --white: #ffffff;
+  --text: #243056;
+  --card: rgba(255, 255, 255, 0.18);
+  --card-strong: rgba(255, 255, 255, 0.28);
+  --border: rgba(255, 255, 255, 0.32);
+  --shadow: 0 20px 50px rgba(55, 28, 120, 0.18);
+}
+
+* {
+  box-sizing: border-box;
+}
+
 html,
 body {
+  margin: 0;
+  padding: 0;
+  font-family: "Inter", sans-serif;
+  color: var(--text);
+  min-height: 100%;
   height: 100%;
+}
+
+html {
+  background: linear-gradient(180deg, #b0caff 0%, #ffffff 100%);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-attachment: fixed;
+}
+
+body {
+  background: transparent;
+}
+
+/* Блики отдельным слоем — лёгкое смещение без перерисовки градиентов в @property */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.45) 0 12%, transparent 13%),
+    radial-gradient(circle at 82% 14%, rgba(255, 255, 255, 0.55) 0 2%, transparent 3%),
+    radial-gradient(circle at 85% 16%, rgba(255, 255, 255, 0.45) 0 1.5%, transparent 3%);
+  background-repeat: no-repeat;
+  background-size: cover, cover, cover;
+  background-attachment: fixed;
+  animation: bg-highlight-drift 11s ease-in-out infinite;
+}
+
+@keyframes bg-highlight-drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  25% {
+    transform: translate3d(0.9%, -0.65%, 0);
+  }
+  50% {
+    transform: translate3d(-0.7%, 0.75%, 0);
+  }
+  75% {
+    transform: translate3d(0.45%, 0.4%, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before {
+    animation: none;
+    transform: none;
+  }
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
 #root {
   height: 100%;
   position: relative;
   z-index: 0;
+}
+
+@keyframes btn-primary-flow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
 }

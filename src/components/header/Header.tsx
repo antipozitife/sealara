@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import sealaraLogo from "../../assets/sealara-logo.png";
+import sealaraLogo from "../../images/sealara-logo.png";
 import "./header.css";
 
 const NAV_ITEMS = [
