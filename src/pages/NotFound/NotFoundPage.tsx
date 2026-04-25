@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Header } from "../../components/header/Header";
+import sealSad from "../../images/seal-sad.png";
 import "../../styles/layout-shell.css";
 import "./not-found.css";
 
@@ -55,7 +56,7 @@ export const NotFoundPage = () => {
         <span className="nf-sparkle four" />
 
         <section className="nf-card" aria-label="Ошибка 404">
-          <div className="nf-seal" />
+          <img className="nf-seal" src={sealSad} alt="Грустный тюлень" />
           <div className="nf-message">Ой, что-то пошло не так!</div>
           <Link className="nf-btn" to="/">
             <span className="nf-arr">←</span>
