@@ -1,6 +1,7 @@
 import React, { useEffect, useId, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "../../components/header/Header";
+import sealThinking from "../../assets/seal-thinking.png";
 import sealWave from "../../assets/seal-wave.png";
 import "../../styles/layout-shell.css";
 import { WhyDiseasesCarousel } from "./WhyDiseasesCarousel";
@@ -16,8 +17,11 @@ const HOME_SCROLL_KEY = "sealara-home-scroll-y";
 
 export const HomePage = () => {
   const cloudFilterId = `speechCloudFi${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
+  const benefitsArrowMarkerId = `benefitsArm${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
   const speechBubbleRef = useRef<HTMLDivElement>(null);
+  const benefitsRevealRef = useRef<HTMLDivElement>(null);
   const [speechBubbleVisible, setSpeechBubbleVisible] = useState(false);
+  const [benefitsRevealVisible, setBenefitsRevealVisible] = useState(false);
 
   useLayoutEffect(() => {
     if (typeof window === "undefined") return;
@@ -82,6 +86,48 @@ export const HomePage = () => {
         if (!entry.isIntersecting) {
           cancelAnimationFrame(showRaf);
           setSpeechBubbleVisible(false);
+          return;
+        }
+        scheduleShow();
+      },
+      { threshold: 0.08, rootMargin: "0px" }
+    );
+
+    io.observe(el);
+    return () => {
+      cancelAnimationFrame(showRaf);
+      io.disconnect();
+    };
+  }, []);
+
+  /* Как у речевого облака: появление при входе блока в зону видимости, уход — снова скрыт */
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setBenefitsRevealVisible(true);
+      return;
+    }
+
+    const el = benefitsRevealRef.current;
+    if (!el) return;
+
+    let showRaf = 0;
+
+    const scheduleShow = () => {
+      cancelAnimationFrame(showRaf);
+      showRaf = requestAnimationFrame(() => {
+        showRaf = requestAnimationFrame(() => {
+          setBenefitsRevealVisible(true);
+        });
+      });
+    };
+
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) {
+          cancelAnimationFrame(showRaf);
+          setBenefitsRevealVisible(false);
           return;
         }
         scheduleShow();
@@ -175,7 +221,9 @@ export const HomePage = () => {
 
           <div className="why-layout">
             <div className="why-visual">
-              <div className="blob blob--why" aria-hidden="true" />
+              <div className="blob blob--why">
+                <img className="why-blob-seal" src={sealThinking} alt="Задумчивый тюлень Sealara" />
+              </div>
             </div>
 
             <div className="why-carousel-column">
@@ -186,14 +234,65 @@ export const HomePage = () => {
         </section>
 
         <section className="benefits">
-          <div className="benefits-title">
-            <p>2. Программа основана на машинном обучении, что обеспечивает</p>
+          <div
+            ref={benefitsRevealRef}
+            className={`benefits-reveal${benefitsRevealVisible ? " benefits-reveal--visible" : ""}`}
+          >
+            <div className="benefits-title">
+              <p className="why-lead-subtitle">2. Программа основана на машинном обучении, что обеспечивает</p>
+            </div>
+
+            <div className="benefits-arrows" aria-hidden="true">
+              <svg
+                className="benefits-arrows-svg"
+                viewBox="0 0 100 30"
+                preserveAspectRatio="xMidYMax meet"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <defs>
+                  <marker
+                    id={benefitsArrowMarkerId}
+                    viewBox="0 0 10 10"
+                    refX="9"
+                    refY="5"
+                    markerWidth="6.5"
+                    markerHeight="6.5"
+                    orient="auto"
+                    markerUnits="strokeWidth"
+                  >
+                    <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(95, 28, 135, 0.82)" />
+                  </marker>
+                </defs>
+                <path
+                  className="benefits-arrows-path"
+                  d="M 25 2 L 25 24"
+                  fill="none"
+                  stroke="rgba(95, 28, 135, 0.72)"
+                  strokeWidth="2.25"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  markerEnd={`url(#${benefitsArrowMarkerId})`}
+                />
+                <path
+                  className="benefits-arrows-path"
+                  d="M 75 2 L 75 24"
+                  fill="none"
+                  stroke="rgba(95, 28, 135, 0.72)"
+                  strokeWidth="2.25"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  markerEnd={`url(#${benefitsArrowMarkerId})`}
+                />
+              </svg>
+            </div>
           </div>
 
           <div className="benefits-grid">
             <article className="benefit-card">
-              <div className="benefit-icon">⚡</div>
-              <h3>Быстрый результат</h3>
+              <div className="benefit-card-header">
+                <div className="benefit-icon">⚡</div>
+                <h3>Быстрый результат</h3>
+              </div>
               <p>
                 Получите предварительный диагноз за 2–3 минуты. Система мгновенно обрабатывает данные и выдаёт
                 рекомендации.
@@ -201,8 +300,10 @@ export const HomePage = () => {
             </article>
 
             <article className="benefit-card">
-              <div className="benefit-icon">🕒</div>
-              <h3>24/7 Доступность</h3>
+              <div className="benefit-card-header">
+                <div className="benefit-icon">🕒</div>
+                <h3>24/7 Доступность</h3>
+              </div>
               <p>
                 Система работает круглосуточно. Проверьте своё здоровье в любое удобное время, не выходя из дома.
               </p>

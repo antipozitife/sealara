@@ -400,11 +400,24 @@
     min-width: 0;
   }
 
-  /* Органичная подложка без пунктирного плейсхолдера */
+  /* Фиолетовая «капля» с тюленем */
   .why-visual .blob--why {
+    display: grid;
+    place-items: end center;
     min-height: min(280px, 42vw);
     height: 100%;
     box-sizing: border-box;
+    overflow: hidden;
+  }
+
+  .why-blob-seal {
+    width: min(98%, 372px);
+    height: auto;
+    max-height: min(390px, 60vw);
+    object-fit: contain;
+    object-position: bottom center;
+    user-select: none;
+    pointer-events: none;
   }
 
   .why-carousel-column {
@@ -424,11 +437,8 @@
     letter-spacing: 0.02em;
     color: rgba(95, 28, 135, 0.9);
     overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    word-break: break-word;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   
   .blob {
@@ -469,11 +479,57 @@
     padding: 30px 0 16px;
   }
   
-  .benefits-title p {
+  .benefits-title {
     text-align: center;
-    margin: 0 0 16px;
-    font-size: 1.05rem;
-    color: rgba(36, 48, 86, 0.78);
+    margin-bottom: 6px;
+  }
+
+  .benefits-title .why-lead-subtitle {
+    display: inline-block;
+    max-width: 100%;
+    vertical-align: top;
+  }
+
+  /* Появление как у .speech-bubble: только когда блок в зоне видимости */
+  .benefits-reveal {
+    opacity: 0;
+    transform: translateY(1rem);
+    transition:
+      opacity 1.35s cubic-bezier(0.25, 0.46, 0.45, 1),
+      transform 1.35s cubic-bezier(0.25, 0.46, 0.45, 1);
+  }
+
+  .benefits-reveal.benefits-reveal--visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .benefits-reveal {
+      opacity: 1;
+      transform: translateY(0);
+      transition: none;
+    }
+  }
+
+  .benefits-arrows {
+    max-width: 860px;
+    width: 100%;
+    padding: 0 10px;
+    box-sizing: border-box;
+    height: clamp(28px, 7vw, 40px);
+    margin: 0 auto clamp(6px, 1.2vw, 12px);
+  }
+
+  .benefits-arrows-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .benefits-arrows-path {
+    fill: none;
   }
   
   .benefits-grid {
@@ -481,7 +537,7 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 18px;
     max-width: 860px;
-    margin: 0 auto;
+    margin: -4px auto 0;
   }
   
   .benefit-card {
@@ -492,22 +548,32 @@
     box-shadow: var(--shadow);
     backdrop-filter: blur(8px);
   }
+
+  .benefit-card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
   
   .benefit-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 14px;
+    flex-shrink: 0;
+    width: 62px;
+    height: 62px;
+    border-radius: 18px;
     display: grid;
     place-items: center;
     background: rgba(255,255,255,0.2);
-    font-size: 1.15rem;
-    margin-bottom: 14px;
+    font-size: 1.65rem;
+    line-height: 1;
   }
   
   .benefit-card h3 {
-    margin: 0 0 10px;
+    margin: 0;
     font-size: 1.35rem;
     color: var(--purple-dark);
+    line-height: 1.25;
+    min-width: 0;
   }
   
   .benefit-card p {
@@ -542,8 +608,9 @@
   
   .cta-card p {
     margin: 0 auto 22px;
-    max-width: 480px;
-    line-height: 1.6;
+    max-width: 520px;
+    font-size: clamp(1.12rem, 0.95rem + 0.85vw, 1.42rem);
+    line-height: 1.55;
   }
   
   .footer {
