@@ -1,0 +1,109 @@
+.auth-page {
+  padding-bottom: 48px;
+}
+
+.auth-main {
+  padding: 12px 0 30px;
+  display: flex;
+  justify-content: center;
+}
+
+.auth-card {
+  width: min(520px, 100%);
+  background: rgba(255, 255, 255, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 24px;
+  padding: 22px;
+  box-shadow: 0 20px 50px rgba(55, 28, 120, 0.12);
+  backdrop-filter: blur(10px);
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.auth-tab {
+  border: 1px solid rgba(95, 28, 135, 0.24);
+  border-radius: 999px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.86);
+  color: #4d4aa2;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-tab--active {
+  background: linear-gradient(145deg, #5c49c4, #4d4aa2);
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.auth-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  color: rgba(36, 48, 86, 0.9);
+}
+
+.auth-form input {
+  border: 1px solid rgba(95, 28, 135, 0.24);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.88);
+  color: rgba(36, 48, 86, 0.95);
+  padding: 10px 12px;
+  font-size: 1rem;
+  outline: none;
+}
+
+.auth-form input:focus {
+  border-color: rgba(95, 28, 135, 0.5);
+}
+
+.auth-error {
+  color: #9a1c3d;
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-weight: 600;
+}
+
+.auth-submit {
+  margin-top: 6px;
+  min-height: 54px;
+  border-radius: 999px;
+  border: 1.5px solid transparent;
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  background-color: #5a189a;
+  background-image: linear-gradient(
+    120deg,
+    #4a148c 0%,
+    #5a189a 14%,
+    #7c2db7 28%,
+    #9d4edd 42%,
+    #c77dff 50%,
+    #9d4edd 58%,
+    #6d28d9 72%,
+    #5b21b6 86%,
+    #4c1d95 100%
+  );
+  background-size: 280% 280%;
+  animation: btn-primary-flow 7s ease-in-out infinite;
+}
+
+.auth-submit:disabled {
+  opacity: 0.75;
+  cursor: not-allowed;
+}

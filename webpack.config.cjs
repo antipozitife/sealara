@@ -43,5 +43,21 @@ module.exports = {
     port: 5173,
     hot: true,
     historyApiFallback: true,
+    // Proxy must run before webpack-dev-middleware; the built-in `proxy` option
+    // is registered too late, so /api falls through to the SPA (404 on POST).
+    setupMiddlewares(middlewares) {
+      const { createProxyMiddleware } = require("http-proxy-middleware");
+      const idx = middlewares.findIndex((m) => m.name === "webpack-dev-middleware");
+      if (idx !== -1) {
+        middlewares.splice(idx, 0, {
+          name: "api-proxy",
+          middleware: createProxyMiddleware("/api", {
+            target: "http://localhost:3001",
+            changeOrigin: true,
+          }),
+        });
+      }
+      return middlewares;
+    },
   },
 };

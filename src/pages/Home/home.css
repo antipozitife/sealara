@@ -562,7 +562,8 @@
     transform-origin: 50% 68%;
     object-fit: contain;
     object-position: 50% 100%;
-    pointer-events: none;
+    pointer-events: auto;
+    cursor: pointer;
     filter: drop-shadow(0 10px 22px rgba(55, 28, 120, 0.14));
   }
 

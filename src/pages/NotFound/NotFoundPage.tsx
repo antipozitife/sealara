@@ -5,6 +5,8 @@ import sealSad from "../../images/seal-sad.png";
 import "../../styles/layout-shell.css";
 import "./not-found.css";
 
+const SEAL_INFO_URL = "https://cicon.ru/seritulen-balt.html";
+
 export const NotFoundPage = () => {
   return (
     <main className="nf-page" aria-label="Страница 404">
@@ -56,7 +58,9 @@ export const NotFoundPage = () => {
         <span className="nf-sparkle four" />
 
         <section className="nf-card" aria-label="Ошибка 404">
-          <img className="nf-seal" src={sealSad} alt="Грустный тюлень" />
+          <a href={SEAL_INFO_URL} target="_blank" rel="noreferrer">
+            <img className="nf-seal" src={sealSad} alt="Грустный тюлень" />
+          </a>
           <div className="nf-message">Ой, что-то пошло не так!</div>
           <Link className="nf-btn" to="/">
             <span className="nf-arr">←</span>

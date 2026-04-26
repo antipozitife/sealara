@@ -5,17 +5,23 @@
   "type": "commonjs",
   "scripts": {
     "dev": "webpack serve --config webpack.config.cjs --mode development",
+    "server": "node server/index.cjs",
     "build": "webpack --config webpack.config.cjs --mode production",
     "preview": "webpack serve --config webpack.config.cjs --mode production",
+    "generate:diseases": "node scripts/generate-diseases-data.cjs",
     "generate:why-carousel": "node scripts/generate-why-carousel-data.cjs"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
     "react": "^19.2.5",
     "react-dom": "^19.2.5",
     "react-router-dom": "^7.14.2"
   },
   "devDependencies": {
-    "xlsx": "^0.18.5",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "css-loader": "^7.1.4",
@@ -25,6 +31,7 @@
     "typescript": "^6.0.3",
     "webpack": "^5.106.2",
     "webpack-cli": "^7.0.2",
-    "webpack-dev-server": "^5.2.3"
+    "webpack-dev-server": "^5.2.3",
+    "xlsx": "^0.18.5"
   }
 }

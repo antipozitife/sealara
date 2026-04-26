@@ -1,0 +1,23 @@
+[
+  {
+    "id": "171721f1-989b-414f-8db8-dcb649c16fa9",
+    "email": "x@y.com",
+    "passwordHash": "$2b$10$vHXm8VHJ660l6c9zpoLwBuldqioIIqMX6HoD3bl83qa1sptCpao/u",
+    "name": "X",
+    "createdAt": "2026-04-25T18:04:24.172Z",
+    "profile": {
+      "surname": "",
+      "firstName": "",
+      "middleName": "",
+      "birthDate": "",
+      "gender": "",
+      "phone": "",
+      "region": ""
+    },
+    "recentQueries": [
+      "Боль в горле и повышенная температура",
+      "Головная боль и усталость",
+      "Сухой кашель более 5 дней"
+    ]
+  }
+]

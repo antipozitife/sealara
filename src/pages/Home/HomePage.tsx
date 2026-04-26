@@ -16,6 +16,7 @@ const CLOUD_PATH_FULL =
 const CLOUD_PATH_OUTER = CLOUD_PATH_FULL.slice(0, CLOUD_PATH_FULL.indexOf(" m7595 -148 "));
 
 const HOME_SCROLL_KEY = "sealara-home-scroll-y";
+const SEAL_INFO_URL = "https://cicon.ru/seritulen-balt.html";
 
 export const HomePage = () => {
   const cloudFilterId = `speechCloudFi${useId().replace(/[^a-zA-Z0-9]/g, "")}`;
@@ -213,7 +214,9 @@ export const HomePage = () => {
             </div>
 
             <div className="hero-seal-slot">
-              <img className="hero-seal-image" src={sealWave} alt="Тюлень машет лапкой" />
+              <a href={SEAL_INFO_URL} target="_blank" rel="noreferrer">
+                <img className="hero-seal-image" src={sealWave} alt="Тюлень машет лапкой" />
+              </a>
             </div>
           </div>
         </section>
@@ -224,7 +227,9 @@ export const HomePage = () => {
           <div className="why-layout">
             <div className="why-visual">
               <div className="blob blob--why">
-                <img className="why-blob-seal" src={sealThinking} alt="Задумчивый тюлень Sealara" />
+                <a href={SEAL_INFO_URL} target="_blank" rel="noreferrer">
+                  <img className="why-blob-seal" src={sealThinking} alt="Задумчивый тюлень Sealara" />
+                </a>
               </div>
             </div>
 
@@ -316,7 +321,9 @@ export const HomePage = () => {
         <section className="cta">
           <div className="cta-figure">
             <div className="cta-seal-circle" aria-hidden="true" />
-            <img className="cta-seal-happy" src={sealHappy} alt="Радостный тюлень Sealara" />
+            <a href={SEAL_INFO_URL} target="_blank" rel="noreferrer">
+              <img className="cta-seal-happy" src={sealHappy} alt="Радостный тюлень Sealara" />
+            </a>
           </div>
 
           <div className="cta-oval-shell">

@@ -20,9 +20,13 @@ export const Footer = () => {
       </div>
 
       <div className="footer-col right">
-        <Link to="/not-found">по всем вопросам</Link>
-        <a href={`mailto:${CONTACT_EMAIL}`}>писать на почту</a>
-        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>
+        <Link className="footer-contact-link" to="/not-found">
+          <span>по всем вопросам и предложениям</span>
+          <span>писать на почту</span>
+        </Link>
+        <a className="footer-contact-email" href={`mailto:${CONTACT_EMAIL}`}>
+          {CONTACT_EMAIL}
+        </a>
       </div>
     </footer>
   );

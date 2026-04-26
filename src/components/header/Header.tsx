@@ -4,15 +4,17 @@ import sealaraLogo from "../../images/sealara-logo.png";
 import "./header.css";
 
 const NAV_ITEMS = [
-  { id: "conditions", label: "заболевания" },
-  { id: "diagnosis", label: "диагностика" },
-  { id: "doctors", label: "врачи" },
-  { id: "profile", label: "профиль" },
+  { id: "conditions", label: "заболевания", to: "/diseases" },
+  { id: "diagnosis", label: "диагностика", to: "/not-found?nav=diagnosis" },
+  { id: "doctors", label: "врачи", to: "/not-found?nav=doctors" },
+  { id: "profile", label: "профиль", to: "/profile" },
 ] as const;
 
 export const Header = () => {
   const location = useLocation();
   const activeNav = new URLSearchParams(location.search).get("nav") ?? "";
+  const isConditionsPage = location.pathname === "/diseases" || location.pathname.startsWith("/disease/");
+  const isProfilePage = location.pathname === "/profile";
 
   return (
     <header className="site-header">
@@ -22,12 +24,13 @@ export const Header = () => {
       </Link>
 
       <nav className="site-nav" aria-label="Основная навигация">
-        {NAV_ITEMS.map(({ id, label }) => {
-          const isActive = activeNav === id;
+        {NAV_ITEMS.map(({ id, label, to }) => {
+          const isActive =
+            id === "conditions" ? isConditionsPage : id === "profile" ? isProfilePage : activeNav === id;
           return (
             <Link
               key={id}
-              to={`/not-found?nav=${id}`}
+              to={to}
               className={`site-nav-link${isActive ? " site-nav-link--active" : ""}`}
             >
               {label}
