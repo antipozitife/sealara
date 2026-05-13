@@ -157,7 +157,9 @@ def verify_api_key(x_api_key: str = Header(...)) -> None:
 
 class APIKeyMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request, call_next):
-        if request.url.path in ("/health", "/prometheus"):
+        path = request.url.path
+        # Документация и схема OpenAPI должны быть доступны без ключа (CI: openapi-typescript-codegen).
+        if path in ("/health", "/prometheus") or path.startswith("/docs") or path.startswith("/openapi") or path == "/redoc":
             return await call_next(request)
         api_key = request.headers.get("x-api-key")
         if not api_key or api_key != API_KEY:
