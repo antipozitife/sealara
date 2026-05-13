@@ -19,5 +19,47 @@
       "Головная боль и усталость",
       "Сухой кашель более 5 дней"
     ]
+  },
+  {
+    "id": "0ab10971-b4df-4179-b5f9-3efa8a99b718",
+    "email": "test_live_4@example.com",
+    "passwordHash": "$2b$10$ciWVjeDQSfAi5CpKAb5cKu19YnVZ88hzB8zSikuaq9eV9vFYah6Cu",
+    "name": "Петр",
+    "createdAt": "2026-04-26T21:18:25.048Z",
+    "profile": {
+      "surname": "Петров",
+      "firstName": "Петр",
+      "middleName": "Петрович",
+      "birthDate": "1992-02-02",
+      "gender": "male",
+      "phone": "+74955555555",
+      "region": "Москва"
+    },
+    "recentQueries": [
+      "Боль в горле и повышенная температура",
+      "Головная боль и усталость",
+      "Сухой кашель более 5 дней"
+    ]
+  },
+  {
+    "id": "683c4b1d-4035-4393-8278-4366668e2614",
+    "email": "antipozitife@icloud.com",
+    "passwordHash": "$2b$10$5SNgwfIRKV5hpscSExC.P.rxtNcnM03xnIFy913/bdxWvEQwHCzgS",
+    "name": "Алина",
+    "createdAt": "2026-04-26T21:20:57.468Z",
+    "profile": {
+      "surname": "Гарипова",
+      "firstName": "Алина",
+      "middleName": "Ранисовна",
+      "birthDate": "2004-06-16",
+      "gender": "female",
+      "phone": "+79625480163",
+      "region": "Россия"
+    },
+    "recentQueries": [
+      "Боль в горле и повышенная температура",
+      "Головная боль и усталость",
+      "Сухой кашель более 5 дней"
+    ]
   }
 ]

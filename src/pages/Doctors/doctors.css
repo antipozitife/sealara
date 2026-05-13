@@ -1,0 +1,116 @@
+.doctors-main {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+  display: grid;
+  gap: 20px;
+}
+
+.doctors-hero h1 {
+  margin: 0 0 8px;
+}
+
+.doctors-hero p {
+  margin: 0;
+  color: #4d4d5a;
+}
+
+.doctors-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.doctors-panel {
+  background: #fff;
+  border: 1px solid #e9e6f7;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.doctors-panel h2 {
+  margin: 0 0 12px;
+}
+
+.doctors-list,
+.appointments-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 10px;
+}
+
+.doctor-card button {
+  width: 100%;
+  text-align: left;
+  border: 1px solid #ddd7f2;
+  border-radius: 12px;
+  padding: 10px;
+  background: #fff;
+  cursor: pointer;
+  display: grid;
+  gap: 4px;
+}
+
+.doctor-card--active button {
+  border-color: #704fc8;
+  box-shadow: 0 0 0 2px rgba(112, 79, 200, 0.12);
+}
+
+.book-form {
+  display: grid;
+  gap: 10px;
+}
+
+.book-form label {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+}
+
+.book-form input,
+.book-form textarea {
+  border: 1px solid #d9d5e8;
+  border-radius: 10px;
+  padding: 10px;
+  font: inherit;
+}
+
+.book-form button {
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 14px;
+  background: #5e35b1;
+  color: #fff;
+  cursor: pointer;
+}
+
+.book-form button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.appointments-list li {
+  border: 1px solid #ebe7f9;
+  border-radius: 10px;
+  padding: 10px;
+  display: grid;
+  gap: 4px;
+}
+
+.doctors-error {
+  color: #b3261e;
+  font-size: 14px;
+}
+
+.doctors-empty {
+  margin: 0;
+  color: #666071;
+}
+
+@media (max-width: 900px) {
+  .doctors-grid {
+    grid-template-columns: 1fr;
+  }
+}

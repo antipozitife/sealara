@@ -1,0 +1,16 @@
+# Global default owner
+* @antipozitife
+
+# Backend / API
+/server/ @antipozitife
+/tests/integration/ @antipozitife
+
+# ML service
+/ml-service/ @antipozitife
+/tests/test_ml_*.py @antipozitife
+
+# CI/CD and repository policy
+/.github/ @antipozitife
+
+# Frontend
+/src/ @antipozitife

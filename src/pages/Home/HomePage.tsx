@@ -159,10 +159,10 @@ export const HomePage = () => {
             </p>
 
             <div className="hero-actions">
-              <Link className="btn btn-primary" to="/not-found">
+              <Link className="btn btn-primary" to="/diagnosis">
                 начать диагностику
               </Link>
-              <Link className="btn btn-secondary" to="/not-found">
+              <Link className="btn btn-secondary" to="/diagnosis">
                 узнать подробнее
               </Link>
             </div>
@@ -331,7 +331,7 @@ export const HomePage = () => {
               <div className="cta-oval-inner">
                 <h2>Готовы проверить своё здоровье?</h2>
                 <p>Начните диагностику прямо сейчас и получите персональные рекомендации от Sealara.</p>
-                <Link className="btn btn-primary" to="/not-found">
+                <Link className="btn btn-primary" to="/diagnosis">
                   начать диагностику
                 </Link>
               </div>

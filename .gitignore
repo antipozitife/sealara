@@ -1,7 +1,11 @@
+uploads/
 node_modules/
+.venv/
 dist/
 .DS_Store
 *.log
 .env
 .env.local
 tmp-cloud-path.txt
+# Generated copy of canonical catalog (see npm run sync:diseases)
+ml-service/data/diseases.json

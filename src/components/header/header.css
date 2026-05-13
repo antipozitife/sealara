@@ -101,6 +101,16 @@
     0 14px 32px rgba(72, 60, 160, 0.28);
 }
 
+.site-nav-link--locked,
+.site-nav-link--locked:hover,
+.site-nav-link--locked:focus-visible {
+  background: rgba(255, 255, 255, 0.75);
+  color: #4d4aa2;
+  box-shadow: 0 14px 32px rgba(72, 60, 160, 0.16);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 @media (max-width: 640px) {
   .site-header {
     grid-template-columns: 1fr;

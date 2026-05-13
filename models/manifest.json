@@ -1,0 +1,60 @@
+{
+  "active_version": 9,
+  "versions": [
+    {
+      "version": 5,
+      "signature": "fb5754eb61e88ca9feef87fef109df49|cases=0",
+      "timestamp": 1777330873.4174879,
+      "metrics": {
+        "top1_accuracy": 0.4,
+        "top3_accuracy": 0.4,
+        "cv_top1_accuracy": 0.519728,
+        "samples": 148
+      }
+    },
+    {
+      "version": 6,
+      "signature": "c17e66c02f5e7aca24e26081c5fda9ec|cases=0",
+      "timestamp": 1777331392.545985,
+      "metrics": {
+        "top1_accuracy": 0.287943,
+        "top3_accuracy": 0.289362,
+        "cv_top1_accuracy": 0.278939,
+        "samples": 3524
+      }
+    },
+    {
+      "version": 7,
+      "signature": "c17e66c02f5e7aca24e26081c5fda9ec|cases=0",
+      "timestamp": 1777345715.116437,
+      "metrics": {
+        "top1_accuracy": 0.287943,
+        "top3_accuracy": 0.289362,
+        "cv_top1_accuracy": 0.278939,
+        "samples": 3524
+      }
+    },
+    {
+      "version": 8,
+      "signature": "fb5754eb61e88ca9feef87fef109df49|cases=0",
+      "timestamp": 1777345716.131039,
+      "metrics": {
+        "top1_accuracy": 0.413793,
+        "top3_accuracy": 0.413793,
+        "cv_top1_accuracy": 0.486111,
+        "samples": 144
+      }
+    },
+    {
+      "version": 9,
+      "signature": "c17e66c02f5e7aca24e26081c5fda9ec|cases=0",
+      "timestamp": 1778341990.234886,
+      "metrics": {
+        "top1_accuracy": 0.289362,
+        "top3_accuracy": 0.289362,
+        "cv_top1_accuracy": 0.278939,
+        "samples": 3524
+      }
+    }
+  ]
+}

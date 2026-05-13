@@ -1,0 +1,317 @@
+name: Production Integration Pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 2 * * *"
+
+concurrency:
+  group: production-integration-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  security-regression:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: Sealara
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=20
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=3s
+          --health-retries=20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Python deps
+        run: pip install -r ml-service/requirements.txt pytest
+
+      - name: Install Node deps
+        run: npm ci
+
+      - name: Run Security regression tests (Node)
+        env:
+          NODE_ENV: test
+          JWT_SECRET: ci-jwt-secret-must-be-at-least-32-chars-long
+          ML_API_KEY: ci-ml-api-key
+          ML_SERVICE_URL: http://127.0.0.1:19999
+        run: |
+          set -o pipefail
+          npm run test:node -- server/security.test.cjs 2>&1 | tee security-tests.log
+      - name: Upload security logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-regression-logs
+          path: security-tests.log
+          if-no-files-found: ignore
+
+  integration-full-cycle:
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    needs: security-regression
+    permissions:
+      contents: read
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: Sealara
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=20
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=3s
+          --health-retries=20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Python deps
+        run: pip install -r ml-service/requirements.txt pytest
+
+      - name: Install Node deps
+        run: npm ci
+
+      - name: Wait for MySQL and Redis ports
+        run: |
+          python - <<'PY'
+          import socket, time, sys
+          targets = [("127.0.0.1", 3306), ("127.0.0.1", 6379)]
+          deadline = time.time() + 120
+          while time.time() < deadline:
+              ok = True
+              for host, port in targets:
+                  s = socket.socket()
+                  s.settimeout(1.0)
+                  try:
+                      s.connect((host, port))
+                  except OSError:
+                      ok = False
+                  finally:
+                      s.close()
+              if ok:
+                  print("MySQL and Redis are reachable")
+                  sys.exit(0)
+              time.sleep(2)
+          print("Timed out waiting for MySQL/Redis")
+          sys.exit(1)
+          PY
+
+      - name: Run ML unit tests
+        env:
+          ML_API_KEY: ci-ml-api-key
+        run: pytest -q tests/test_ml_features_unit.py tests/test_information_gain.py tests/test_ml_concurrent_predict.py
+
+      - name: Start ML service
+        env:
+          ML_API_KEY: ci-ml-api-key
+        run: python -m uvicorn app:app --app-dir ml-service --host 0.0.0.0 --port 8001 &
+
+      - name: Wait for ML health
+        run: |
+          for i in {1..40}; do
+            curl -fsS http://localhost:8001/health && exit 0
+            sleep 2
+          done
+          exit 1
+
+      - name: Verify Node-ML OpenAPI contract
+        run: npm run verify:ml-client-contract
+
+      - name: Run Node integration suite
+        env:
+          NODE_ENV: test
+          JWT_SECRET: ci-jwt-secret-must-be-at-least-32-chars-long
+          ML_API_KEY: ci-ml-api-key
+          ML_SERVICE_URL: http://localhost:8001
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_NAME: Sealara
+          REDIS_URL: redis://127.0.0.1:6379
+          SEALARA_DB_INTEGRATION: "1"
+          FRONTEND_ORIGIN: http://localhost:5173
+        run: |
+          set -o pipefail
+          npm run test:integration 2>&1 | tee node-integration.log
+
+      - name: Run full diploma e2e chain
+        env:
+          NODE_ENV: test
+          JWT_SECRET: ci-jwt-secret-must-be-at-least-32-chars-long
+          ML_API_KEY: ci-ml-api-key
+          ML_SERVICE_URL: http://localhost:8001
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_NAME: Sealara
+          REDIS_URL: redis://127.0.0.1:6379
+          SEALARA_DB_INTEGRATION: "1"
+          FRONTEND_ORIGIN: http://localhost:5173
+        run: |
+          set -o pipefail
+          npm run test:integration:fullcycle 2>&1 | tee fullcycle-e2e.log
+
+      - name: Upload integration logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: integration-full-cycle-logs
+          path: |
+            node-integration.log
+            fullcycle-e2e.log
+          if-no-files-found: ignore
+
+  nightly-e2e-regression:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    services:
+      mysql:
+        image: mysql:8
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: Sealara
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uroot -proot --silent"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=20
+      redis:
+        image: redis:7
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=3s
+          --health-retries=20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Python deps
+        run: pip install -r ml-service/requirements.txt pytest
+
+      - name: Install Node deps
+        run: npm ci
+
+      - name: Start ML service
+        env:
+          ML_API_KEY: ci-ml-api-key
+        run: python -m uvicorn app:app --app-dir ml-service --host 0.0.0.0 --port 8001 &
+
+      - name: Wait for ML health
+        run: |
+          for i in {1..40}; do
+            curl -fsS http://localhost:8001/health && exit 0
+            sleep 2
+          done
+          exit 1
+
+      - name: Verify Node-ML OpenAPI contract
+        run: npm run verify:ml-client-contract
+
+      - name: Run nightly full regression chain
+        env:
+          NODE_ENV: test
+          JWT_SECRET: ci-jwt-secret-must-be-at-least-32-chars-long
+          ML_API_KEY: ci-ml-api-key
+          ML_SERVICE_URL: http://localhost:8001
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_NAME: Sealara
+          REDIS_URL: redis://127.0.0.1:6379
+          SEALARA_DB_INTEGRATION: "1"
+          FRONTEND_ORIGIN: http://localhost:5173
+        run: |
+          set -o pipefail
+          npm run test:integration 2>&1 | tee nightly-integration.log
+          npm run test:integration:fullcycle 2>&1 | tee nightly-fullcycle.log
+          npm run test:node -- server/security.test.cjs 2>&1 | tee nightly-security.log
+
+      - name: Upload nightly logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-e2e-regression-logs
+          path: |
+            nightly-integration.log
+            nightly-fullcycle.log
+            nightly-security.log
+          if-no-files-found: ignore

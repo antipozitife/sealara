@@ -47,6 +47,12 @@
   gap: 10px;
 }
 
+.auth-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
 .auth-form label {
   display: flex;
   flex-direction: column;
@@ -65,7 +71,21 @@
   outline: none;
 }
 
+.auth-form select {
+  border: 1px solid rgba(95, 28, 135, 0.24);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.88);
+  color: rgba(36, 48, 86, 0.95);
+  padding: 10px 12px;
+  font-size: 1rem;
+  outline: none;
+}
+
 .auth-form input:focus {
+  border-color: rgba(95, 28, 135, 0.5);
+}
+
+.auth-form select:focus {
   border-color: rgba(95, 28, 135, 0.5);
 }
 
@@ -106,4 +126,10 @@
 .auth-submit:disabled {
   opacity: 0.75;
   cursor: not-allowed;
+}
+
+@media (max-width: 700px) {
+  .auth-grid {
+    grid-template-columns: 1fr;
+  }
 }

@@ -1,0 +1,25 @@
+{
+  "version": 5,
+  "signature": "fb5754eb61e88ca9feef87fef109df49|cases=0",
+  "timestamp": 1777330873.417366,
+  "metrics": {
+    "top1_accuracy": 0.4,
+    "top3_accuracy": 0.4,
+    "cv_top1_accuracy": 0.519728,
+    "samples": 148
+  },
+  "diseases_count": 2,
+  "samples": 148,
+  "artifacts_sha256": {
+    "rf": "9ceaf270fcfdac94f127ba107b1395b31e9431ba5c83c04a021a7cbbb9f74110",
+    "vocab": "e6adaf96cfaaf8b6633a398e3a78d383b5161205f85234df94ab07a3fedbba98",
+    "idf": "4abee8520880d373ffb737f36d64fccb4bec7e87ed4925d5ebbc97018768ed94",
+    "diseases": "990288a23913f5c6a69fe6f7272745a62f1451f609ed4b8416f46e93645cf38e",
+    "symptom_freq": "48c4c024accd1d56900a120766583b8d68f82d57d49fb71cf631eebdc73a72d5",
+    "metrics": "ec674419d66a7593f10ada588e93aca8690374a23f322d2defcf4750413d263f",
+    "confirmed_cases": "3fe4a92ad75f98888c0fdc32304e33df0191042a9f85c4d1c59ea2ca284412c0",
+    "feedback_count": "641af9bbbd4b784e0009f34e46e39c48e44fc6fde2554d0ee8ffc92b8067a2ec",
+    "last_torch_train_ts": "1b932989cefdb38583d481a7d425fc1cdc887af058a11add332d7d369b7efe27",
+    "torch_cases_count": "641af9bbbd4b784e0009f34e46e39c48e44fc6fde2554d0ee8ffc92b8067a2ec"
+  }
+}

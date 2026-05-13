@@ -3,9 +3,31 @@ import { useNavigate } from "react-router-dom";
 import { Footer } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
 import sealSad from "../../images/seal-sad.png";
-import { AuthUser, logout, me, saveProfile, UserProfile } from "../../lib/auth-api";
+import {
+  AuthUser,
+  deleteAvatar,
+  logout,
+  meOptional,
+  saveProfile,
+  uploadAvatar,
+  UserProfile,
+} from "../../lib/auth-api";
 import "../../styles/layout-shell.css";
 import "./profile.css";
+
+function normalizeAvatarSrc(url: string | undefined): string {
+  if (!url) return "";
+  const u = url.trim();
+  if (/^https?:\/\//i.test(u)) return u;
+  return u.startsWith("/") ? u : `/${u}`;
+}
+
+/** В Chrome/Firefox HEIC в теге img не показывается и даёт лишние запросы/ошибки — не подставляем URL. */
+function isHeifLikeAvatarUrl(url: string | undefined): boolean {
+  if (!url) return false;
+  const base = url.trim().split(/[?#]/)[0].toLowerCase();
+  return base.endsWith(".heic") || base.endsWith(".heif");
+}
 
 export const ProfilePage: React.FC = () => {
   const [user, setUser] = useState<AuthUser | null>(null);
@@ -19,14 +41,20 @@ export const ProfilePage: React.FC = () => {
     region: "",
   });
   const [saving, setSaving] = useState(false);
+  const [avatarBusy, setAvatarBusy] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+  const [avatarLoadFailed, setAvatarLoadFailed] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
     const load = async () => {
       try {
-        const response = await me();
+        const response = await meOptional();
+        if (!response) {
+          navigate("/auth");
+          return;
+        }
         setUser(response.user);
         setProfile(response.user.profile);
       } catch {
@@ -38,6 +66,10 @@ export const ProfilePage: React.FC = () => {
     void load();
   }, [navigate]);
 
+  useEffect(() => {
+    setAvatarLoadFailed(false);
+  }, [profile.avatarUrl]);
+
   const onChange = (key: keyof UserProfile, value: string) => {
     setProfile((prev) => ({ ...prev, [key]: value }));
   };
@@ -46,11 +78,44 @@ export const ProfilePage: React.FC = () => {
     setSaving(true);
     setError("");
     try {
-      await saveProfile(profile);
+      const { profile: next } = await saveProfile(profile);
+      setProfile(next);
+      setUser((u) => (u ? { ...u, profile: next } : null));
     } catch (err) {
       setError(err instanceof Error ? err.message : "Не удалось сохранить профиль");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const onAvatarSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setAvatarBusy(true);
+    setError("");
+    try {
+      const { profile: next } = await uploadAvatar(file);
+      setProfile(next);
+      setUser((u) => (u ? { ...u, profile: next } : null));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Не удалось загрузить фото");
+    } finally {
+      setAvatarBusy(false);
+    }
+  };
+
+  const onRemoveAvatar = async () => {
+    setAvatarBusy(true);
+    setError("");
+    try {
+      const { profile: next } = await deleteAvatar();
+      setProfile(next);
+      setUser((u) => (u ? { ...u, profile: next } : null));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Не удалось удалить фото");
+    } finally {
+      setAvatarBusy(false);
     }
   };
 
@@ -75,7 +140,42 @@ export const ProfilePage: React.FC = () => {
 
       <main className="profile-main">
         <section className="profile-hero">
-          <img className="profile-avatar" src={sealSad} alt="Аватар пользователя" />
+          <div className="profile-hero-visual">
+            <img
+              className="profile-avatar"
+              src={
+                avatarLoadFailed || !profile.avatarUrl || isHeifLikeAvatarUrl(profile.avatarUrl)
+                  ? sealSad
+                  : normalizeAvatarSrc(profile.avatarUrl)
+              }
+              alt=""
+              width={88}
+              height={88}
+              onError={() => setAvatarLoadFailed(true)}
+            />
+            <div className="profile-avatar-actions">
+              <label className="profile-btn profile-btn--ghost profile-avatar-upload-label">
+                <input
+                  type="file"
+                  className="profile-avatar-file"
+                  accept="image/*"
+                  onChange={onAvatarSelected}
+                  disabled={avatarBusy}
+                />
+                {avatarBusy ? "Загрузка…" : "Выбрать фото"}
+              </label>
+              {profile.avatarUrl ? (
+                <button
+                  type="button"
+                  className="profile-btn profile-btn--ghost"
+                  onClick={() => void onRemoveAvatar()}
+                  disabled={avatarBusy}
+                >
+                  Удалить фото
+                </button>
+              ) : null}
+            </div>
+          </div>
           <h1>{user?.name || "Профиль пользователя"}</h1>
         </section>
 

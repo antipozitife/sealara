@@ -1,0 +1,146 @@
+version: "3.9"
+
+services:
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 5s
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: Sealara
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$${MYSQL_ROOT_PASSWORD} --silent"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 15s
+
+  ml-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.ml
+    environment:
+      ML_API_KEY: change-me-in-production
+      DISEASES_JSON_PATH: /app/src/data/diseases.json
+      REDIS_URL: redis://redis:6379
+      REDIS_CONNECT_RETRIES: 15
+      REDIS_CONNECT_DELAY_MS: 1000
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./:/app
+      - ml_models:/app/models
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "python -c \"import urllib.request,sys; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8001/health').getcode()==200 else 1)\"",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    environment:
+      PORT: 3001
+      NODE_ENV: ${NODE_ENV:-development}
+      FRONTEND_ORIGIN: ${FRONTEND_ORIGIN:-http://localhost:5173}
+      JWT_SECRET: sealara-dev-secret
+      ML_API_KEY: change-me-in-production
+      ML_SERVICE_URL: http://ml-service:8001
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: Sealara
+      REDIS_URL: redis://redis:6379
+      REDIS_FEEDBACK_QUEUE_KEY: sealara:pending_feedback
+      REDIS_CONNECT_RETRIES: 15
+      REDIS_CONNECT_DELAY_MS: 1000
+      # Абсолютные URL аватаров, если фронт не проксирует /uploads (напр. https://api.example.com)
+      PUBLIC_API_URL: ${PUBLIC_API_URL:-}
+      TRUST_PROXY_HOPS: ${TRUST_PROXY_HOPS:-0}
+      AVATAR_MAX_BYTES: ${AVATAR_MAX_BYTES:-15728640}
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./:/app
+      # Персистентные файлы аватаров (поверх bind-mount ./:/app для каталога uploads)
+      - api_uploads:/app/uploads
+    depends_on:
+      redis:
+        condition: service_healthy
+      db:
+        condition: service_healthy
+      ml-service:
+        condition: service_healthy
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "node -e \"fetch('http://127.0.0.1:3001/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))\"",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+  prometheus:
+    image: prom/prometheus:latest
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./ops/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      api:
+        condition: service_healthy
+      ml-service:
+        condition: service_healthy
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3002:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./ops/grafana/provisioning:/etc/grafana/provisioning:ro
+    depends_on:
+      prometheus:
+        condition: service_started
+
+volumes:
+  redis_data:
+  mysql_data:
+  ml_models:
+  api_uploads:
+  grafana_data:
