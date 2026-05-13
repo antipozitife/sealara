@@ -7,5 +7,6 @@ dist/
 .env
 .env.local
 tmp-cloud-path.txt
+.openapi-sealara.tmp.json
 # Generated copy of canonical catalog (see npm run sync:diseases)
 ml-service/data/diseases.json

@@ -172,6 +172,8 @@ jobs:
           exit 1
 
       - name: Verify Node-ML OpenAPI contract
+        env:
+          ML_API_KEY: ci-ml-api-key
         run: npm run verify:ml-client-contract
 
       - name: Run Node integration suite
@@ -283,6 +285,8 @@ jobs:
           exit 1
 
       - name: Verify Node-ML OpenAPI contract
+        env:
+          ML_API_KEY: ci-ml-api-key
         run: npm run verify:ml-client-contract
 
       - name: Run nightly full regression chain
