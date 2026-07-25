@@ -172,7 +172,7 @@ export const DiagnosisPage: React.FC = () => {
     return (
       <div className="shell diagnosis-page">
         <Header />
-        <main className="diagnosis-main diagnosis-loading">Загрузка диагностики...</main>
+        <main id="main-content" className="diagnosis-main diagnosis-loading">Загрузка диагностики...</main>
         <Footer />
       </div>
     );
@@ -181,7 +181,7 @@ export const DiagnosisPage: React.FC = () => {
   return (
     <div className="shell diagnosis-page">
       <Header />
-      <main className="diagnosis-main">
+      <main id="main-content" className="diagnosis-main">
         {step === "questions" && (
           <section className="diagnosis-card">
             <h1>Ответьте на вопросы, чтобы получить предварительный список заболеваний и релевантные симптомы.</h1>

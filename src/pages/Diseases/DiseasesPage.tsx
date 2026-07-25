@@ -38,7 +38,7 @@ export const DiseasesPage: React.FC = () => {
     <div className="shell diseases-page">
       <Header />
 
-      <main className="diseases-main">
+      <main id="main-content" className="diseases-main">
         <section className="diseases-hero">
           <h1>Заболевания</h1>
           <p>

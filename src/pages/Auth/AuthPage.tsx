@@ -57,7 +57,7 @@ export const AuthPage: React.FC = () => {
     <div className="shell auth-page">
       <Header />
 
-      <main className="auth-main">
+      <main id="main-content" className="auth-main">
         <section className="auth-card">
           <div className="auth-tabs">
             <button

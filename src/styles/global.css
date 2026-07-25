@@ -85,6 +85,23 @@ a {
   text-decoration: none;
 }
 
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+:focus-visible {
+  outline: 3px solid #f4b7ff;
+  outline-offset: 3px;
+}
+
 #root {
   min-height: 100%;
   min-height: 100dvh;
@@ -93,6 +110,39 @@ a {
   height: 100%;
   position: relative;
   z-index: 0;
+}
+
+.page-loader {
+  min-height: 100dvh;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 14px;
+  color: #4a2476;
+  font-weight: 700;
+}
+
+.page-loader__spinner {
+  width: 42px;
+  aspect-ratio: 1;
+  border: 4px solid rgba(93, 45, 121, 0.18);
+  border-top-color: #6d28d9;
+  border-radius: 50%;
+  animation: loader-spin 0.75s linear infinite;
+}
+
+@keyframes loader-spin {
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-loader__spinner {
+    animation: none;
+    border-top-color: rgba(93, 45, 121, 0.18);
+    background: #6d28d9;
+  }
 }
 
 @keyframes btn-primary-flow {

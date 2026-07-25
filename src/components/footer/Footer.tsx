@@ -8,10 +8,10 @@ export const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-col">
-        <Link to="/not-found">энциклопедия болезней</Link>
-        <Link to="/not-found">диагностика болезней</Link>
-        <Link to="/not-found">сборник врачей</Link>
-        <Link to="/not-found">мой профиль</Link>
+        <Link to="/diseases">энциклопедия болезней</Link>
+        <Link to="/diagnosis">диагностика болезней</Link>
+        <Link to="/doctors">сборник врачей</Link>
+        <Link to="/profile">мой профиль</Link>
       </div>
 
       <div className="footer-note">
@@ -20,10 +20,10 @@ export const Footer = () => {
       </div>
 
       <div className="footer-col right">
-        <Link className="footer-contact-link" to="/not-found">
+        <a className="footer-contact-link" href={`mailto:${CONTACT_EMAIL}?subject=Sealara — обратная связь`}>
           <span>по всем вопросам и предложениям</span>
           <span>писать на почту</span>
-        </Link>
+        </a>
         <a className="footer-contact-email" href={`mailto:${CONTACT_EMAIL}`}>
           {CONTACT_EMAIL}
         </a>

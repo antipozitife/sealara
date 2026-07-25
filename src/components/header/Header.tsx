@@ -39,8 +39,11 @@ export const Header = () => {
 
   return (
     <header className="site-header">
+      <a className="skip-link" href="#main-content">
+        Перейти к основному содержимому
+      </a>
       <Link className="site-logo" to="/">
-        <img className="site-logo-img" src={sealaraLogo} alt="" decoding="async" />
+        <img className="site-logo-img" src={sealaraLogo} alt="" decoding="async" width="360" height="132" />
         <span className="site-logo-text">Sealara</span>
       </Link>
 
@@ -60,14 +63,16 @@ export const Header = () => {
 
           if (isLockedForGuests) {
             return (
-              <span
+              <Link
                 key={id}
-                className="site-nav-link site-nav-link--locked"
-                aria-disabled="true"
-                title={`Войдите в аккаунт, чтобы открыть ${label}`}
+                className="site-nav-link site-nav-link--guest"
+                to="/auth"
+                title={`Войти, чтобы открыть раздел «${label}»`}
               >
-                {label} 🔒
-              </span>
+                {label}
+                <span className="site-nav-lock" aria-hidden="true">🔒</span>
+                <span className="visually-hidden"> — требуется вход</span>
+              </Link>
             );
           }
 
@@ -76,6 +81,7 @@ export const Header = () => {
               key={id}
               to={to}
               className={`site-nav-link${isActive ? " site-nav-link--active" : ""}`}
+              aria-current={isActive ? "page" : undefined}
             >
               {label}
             </Link>

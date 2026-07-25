@@ -111,7 +111,7 @@ export const DoctorsPage: React.FC = () => {
     return (
       <div className="shell doctors-page">
         <Header />
-        <main className="doctors-main">Загрузка врачей...</main>
+        <main id="main-content" className="doctors-main">Загрузка врачей...</main>
         <Footer />
       </div>
     );
@@ -120,7 +120,7 @@ export const DoctorsPage: React.FC = () => {
   return (
     <div className="shell doctors-page">
       <Header />
-      <main className="doctors-main">
+      <main id="main-content" className="doctors-main">
         <section className="doctors-hero">
           <h1>Запись к врачу через Госуслуги</h1>
           <p>
