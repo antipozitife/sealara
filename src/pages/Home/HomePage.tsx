@@ -2,9 +2,9 @@ import React, { useEffect, useId, useLayoutEffect, useRef, useState } from "reac
 import { Link } from "react-router-dom";
 import { Footer } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
-import sealHappy from "../../images/seal-happy.png";
-import sealThinking from "../../images/seal-thinking.png";
-import sealWave from "../../images/seal-wave.png";
+import sealHappy from "../../images/seal-happy.webp";
+import sealThinking from "../../images/seal-thinking.webp";
+import sealWave from "../../images/seal-wave.webp";
 import "../../styles/layout-shell.css";
 import { WhyDiseasesCarousel } from "./WhyDiseasesCarousel";
 import "./home.css";
@@ -149,7 +149,7 @@ export const HomePage = () => {
     <div className="shell">
       <Header />
 
-      <main>
+      <main id="main-content">
         <section className="hero">
           <div className="hero-content">
             <h1>Интеллектуальная система здоровья</h1>

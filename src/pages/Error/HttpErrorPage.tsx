@@ -1,7 +1,7 @@
 import React from "react";
 import { Link, useParams } from "react-router-dom";
 import { Header } from "../../components/header/Header";
-import sealSad from "../../images/seal-sad.png";
+import sealSad from "../../images/seal-sad.webp";
 import "../../styles/layout-shell.css";
 import "../NotFound/not-found.css";
 
@@ -21,7 +21,7 @@ export const HttpErrorShell: React.FC<ShellProps> = ({ code }) => {
   const label = String(display);
 
   return (
-    <main className="nf-page" aria-label={`Страница ошибки ${label}`}>
+    <main id="main-content" className="nf-page" aria-label={`Страница ошибки ${label}`}>
       <svg
         className="nf-bg404"
         viewBox="0 0 720 300"

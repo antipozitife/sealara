@@ -1,14 +1,20 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-module.exports = {
+module.exports = (_, argv = {}) => {
+  const isProduction = argv.mode === "production";
+
+  return {
   entry: "./src/index.tsx",
   output: {
     path: path.resolve(__dirname, "dist"),
-    filename: "bundle.js",
+    filename: isProduction ? "assets/js/[name].[contenthash:8].js" : "assets/js/[name].js",
+    chunkFilename: isProduction ? "assets/js/[name].[contenthash:8].chunk.js" : "assets/js/[name].chunk.js",
+    assetModuleFilename: "assets/media/[name].[contenthash:8][ext][query]",
     publicPath: "/",
     clean: true,
   },
+  devtool: isProduction ? "source-map" : "eval-cheap-module-source-map",
   resolve: {
     extensions: [".tsx", ".ts", ".js"],
   },
@@ -37,8 +43,33 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: "./index.html",
+      minify: isProduction
+        ? {
+            collapseWhitespace: true,
+            removeComments: true,
+            useShortDoctype: true,
+          }
+        : false,
     }),
   ],
+  optimization: {
+    runtimeChunk: "single",
+    splitChunks: {
+      chunks: "all",
+      cacheGroups: {
+        react: {
+          test: /[\\/]node_modules[\\/](react|react-dom|react-router|react-router-dom)[\\/]/,
+          name: "react-vendor",
+          priority: 20,
+        },
+      },
+    },
+  },
+  performance: {
+    hints: isProduction ? "warning" : false,
+    maxAssetSize: 500_000,
+    maxEntrypointSize: 700_000,
+  },
   devServer: {
     port: 5173,
     hot: true,
@@ -71,4 +102,5 @@ module.exports = {
       return middlewares;
     },
   },
+  };
 };

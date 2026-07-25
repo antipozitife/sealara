@@ -10,6 +10,8 @@
     "ml:install": "python3 -m pip install -r ml-service/requirements.txt",
     "ml:serve": "node scripts/ml-serve.cjs",
     "test:node": "jest -c jest.config.cjs --runInBand --forceExit",
+    "typecheck": "tsc --noEmit",
+    "check": "npm run typecheck && npm run test:node && npm run build",
     "test:integration": "jest -c jest.config.cjs tests/integration --runInBand --forceExit",
     "test:integration:fullcycle": "jest -c jest.config.cjs tests/integration/e2e-diploma-flow.test.cjs --runInBand --forceExit",
     "generate:ml-client": "node scripts/fetch-ml-openapi.cjs .openapi-sealara.tmp.json && npx openapi-typescript-codegen --input .openapi-sealara.tmp.json --output ./server/generated/ml-client --client fetch && node -e \"require('fs').unlinkSync('.openapi-sealara.tmp.json')\"",
@@ -19,7 +21,8 @@
     "build": "webpack --config webpack.config.cjs --mode production",
     "preview": "webpack serve --config webpack.config.cjs --mode production",
     "generate:diseases": "node scripts/generate-diseases-data.cjs && npm run sync:diseases",
-    "generate:why-carousel": "node scripts/generate-why-carousel-data.cjs"
+    "generate:why-carousel": "node scripts/generate-why-carousel-data.cjs",
+    "optimize:images": "node scripts/optimize-images.cjs"
   },
   "dependencies": {
     "awilix": "^13.0.3",

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Footer } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
-import sealSad from "../../images/seal-sad.png";
+import sealSad from "../../images/seal-sad.webp";
 import {
   AuthUser,
   deleteAvatar,
@@ -128,7 +128,7 @@ export const ProfilePage: React.FC = () => {
     return (
       <div className="shell profile-page">
         <Header />
-        <main className="profile-main profile-loading">Загрузка профиля...</main>
+        <main id="main-content" className="profile-main profile-loading">Загрузка профиля...</main>
         <Footer />
       </div>
     );
@@ -138,7 +138,7 @@ export const ProfilePage: React.FC = () => {
     <div className="shell profile-page">
       <Header />
 
-      <main className="profile-main">
+      <main id="main-content" className="profile-main">
         <section className="profile-hero">
           <div className="profile-hero-visual">
             <img

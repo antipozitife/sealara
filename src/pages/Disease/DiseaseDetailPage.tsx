@@ -3,7 +3,7 @@ import { Link, Navigate, useParams } from "react-router-dom";
 import { Footer } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
 import diseasesData from "../../data/diseases.json";
-import sealReading from "../../images/seal-reading.png";
+import sealReading from "../../images/seal-reading.webp";
 import "../../styles/layout-shell.css";
 import "./disease.css";
 
@@ -90,7 +90,7 @@ export const DiseaseDetailPage: React.FC = () => {
     <div className="shell disease-page">
       <Header />
 
-      <main className="disease-main">
+      <main id="main-content" className="disease-main">
         <nav className="disease-back">
           <Link to="/diseases">← к списку заболеваний</Link>
         </nav>
