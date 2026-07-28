@@ -66,8 +66,20 @@ test("guest completes the demo journey and sees a result", async ({ page }) => {
   await page.getByRole("link", { name: "попробовать справочный анализ" }).click();
   await expect(page).toHaveURL(/\/diagnosis\?mode=demo/);
 
-  for (const checkbox of await page.getByRole("checkbox").all()) await checkbox.check();
-  await page.getByRole("button", { name: "Продолжить к справочному анализу" }).click();
+  await page.getByLabel("Мне исполнилось 18 лет.").check();
+  await page
+    .getByLabel(
+      "Я понимаю, что результат является автоматической справочной подборкой, не диагнозом и не основанием для самолечения или отказа от обращения к врачу.",
+    )
+    .check();
+  await page
+    .getByLabel(
+      "Я явно соглашаюсь на обработку введённых сведений о симптомах для формирования справочного результата; в деморежиме результат не сохраняется в профиле.",
+    )
+    .check();
+  const continueButton = page.getByRole("button", { name: "Продолжить к справочному анализу" });
+  await expect(continueButton).toBeEnabled();
+  await continueButton.click();
 
   await expect(page.getByText("Деморежим", { exact: true })).toBeVisible();
   await page.getByRole("radio", { name: "Слабо" }).check();
