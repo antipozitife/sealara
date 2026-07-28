@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { meOptional } from "../../lib/auth-api";
-import sealaraLogo from "../../images/sealara-logo.png";
+import sealaraLogo from "../../images/sealara-logo-192.webp";
 import "./header.css";
 
 const NAV_ITEMS = [
   { id: "conditions", label: "заболевания", to: "/diseases" },
-  { id: "diagnosis", label: "диагностика", to: "/diagnosis" },
+  { id: "diagnosis", label: "анализ симптомов", to: "/diagnosis" },
   { id: "doctors", label: "врачи", to: "/doctors" },
   { id: "profile", label: "профиль", to: "/profile" },
 ] as const;
@@ -14,6 +14,7 @@ const NAV_ITEMS = [
 export const Header = () => {
   const location = useLocation();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -31,6 +32,10 @@ export const Header = () => {
     };
   }, [location.pathname]);
 
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [location.pathname, location.search]);
+
   const activeNav = new URLSearchParams(location.search).get("nav") ?? "";
   const isConditionsPage = location.pathname === "/diseases" || location.pathname.startsWith("/disease/");
   const isDiagnosisPage = location.pathname === "/diagnosis";
@@ -43,13 +48,28 @@ export const Header = () => {
         Перейти к основному содержимому
       </a>
       <Link className="site-logo" to="/">
-        <img className="site-logo-img" src={sealaraLogo} alt="" decoding="async" width="360" height="132" />
+        <img className="site-logo-img" src={sealaraLogo} alt="" decoding="async" width="192" height="192" />
         <span className="site-logo-text">Sealara</span>
       </Link>
 
-      <nav className="site-nav" aria-label="Основная навигация">
+      <button
+        type="button"
+        className="site-menu-toggle"
+        aria-expanded={menuOpen}
+        aria-controls="site-navigation"
+        aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}
+        onClick={() => setMenuOpen((current) => !current)}
+      >
+        <span aria-hidden="true">{menuOpen ? "×" : "☰"}</span>
+      </button>
+
+      <nav
+        id="site-navigation"
+        className={`site-nav${menuOpen ? " site-nav--open" : ""}`}
+        aria-label="Основная навигация"
+      >
         {NAV_ITEMS.map(({ id, label, to }) => {
-          const isLockedForGuests = (id === "diagnosis" || id === "doctors") && !isAuthenticated;
+          const isLockedForGuests = (id === "doctors" || id === "profile") && !isAuthenticated;
           const isActive =
             id === "conditions"
               ? isConditionsPage
@@ -57,29 +77,33 @@ export const Header = () => {
                 ? isDiagnosisPage && !isLockedForGuests
                 : id === "doctors"
                   ? isDoctorsPage && !isLockedForGuests
-                : id === "profile"
-                  ? isProfilePage
-                  : activeNav === id;
+                  : id === "profile"
+                    ? isProfilePage
+                    : activeNav === id;
 
           if (isLockedForGuests) {
             return (
               <Link
                 key={id}
                 className="site-nav-link site-nav-link--guest"
-                to="/auth"
+                to={`/auth?next=${encodeURIComponent(to)}`}
                 title={`Войти, чтобы открыть раздел «${label}»`}
               >
                 {label}
-                <span className="site-nav-lock" aria-hidden="true">🔒</span>
+                <span className="site-nav-lock" aria-hidden="true">
+                  🔒
+                </span>
                 <span className="visually-hidden"> — требуется вход</span>
               </Link>
             );
           }
 
+          const guestDestination = id === "diagnosis" && !isAuthenticated ? "/diagnosis?mode=demo" : to;
+
           return (
             <Link
               key={id}
-              to={to}
+              to={guestDestination}
               className={`site-nav-link${isActive ? " site-nav-link--active" : ""}`}
               aria-current={isActive ? "page" : undefined}
             >

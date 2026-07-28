@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { Footer } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
+import { MedicalNotice } from "../../components/MedicalNotice";
 import diseasesData from "../../data/diseases.json";
 import "../../styles/layout-shell.css";
 import "./diseases.css";
@@ -42,9 +43,10 @@ export const DiseasesPage: React.FC = () => {
         <section className="diseases-hero">
           <h1>Заболевания</h1>
           <p>
-            Подборка заболеваний из базы Sealara. Откройте карточку заболевания, чтобы посмотреть симптомы,
-            диагностику и рекомендации.
+            Справочные материалы общего характера. Они не предназначены для самодиагностики, выбора лечения
+            или оценки срочности состояния.
           </p>
+          <MedicalNotice compact />
           <input
             className="diseases-search"
             type="search"

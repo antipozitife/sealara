@@ -1,0 +1,24 @@
+.ui-state-message {
+  padding: 12px 14px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  line-height: 1.45;
+}
+
+.ui-state-message--info {
+  border-color: rgba(109, 40, 217, 0.22);
+  background: rgba(109, 40, 217, 0.08);
+  color: #4c1d95;
+}
+
+.ui-state-message--success {
+  border-color: rgba(20, 108, 67, 0.24);
+  background: rgba(20, 108, 67, 0.08);
+  color: #146c43;
+}
+
+.ui-state-message--error {
+  border-color: rgba(180, 35, 24, 0.25);
+  background: rgba(180, 35, 24, 0.08);
+  color: #8f1d15;
+}

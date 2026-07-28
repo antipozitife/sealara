@@ -138,7 +138,9 @@ async function requestJson<T>(input: string, init?: RequestInit): Promise<T> {
     try {
       const payload = (await response.json()) as { error?: string };
       if (payload.error) message = payload.error;
-    } catch {}
+    } catch {
+      // Ответ не в JSON-формате — используем сообщение по умолчанию.
+    }
     throw new Error(message);
   }
 
@@ -197,7 +199,9 @@ export async function meOptional(): Promise<AuthResponse | null> {
     try {
       const payload = (await response.json()) as { error?: string };
       if (payload.error) message = payload.error;
-    } catch {}
+    } catch {
+      // Ответ не в JSON-формате — используем сообщение по умолчанию.
+    }
     throw new Error(message);
   }
   const data = (await response.json()) as { user: AuthUser | null };
@@ -236,30 +240,35 @@ export function deleteAvatar() {
   });
 }
 
-export function diagnosisOptions() {
-  return requestJson<{ symptoms: string[] }>("/api/diagnosis/options");
+const diagnosisUrl = (path: string, demo = false) => `/api/diagnosis/${path}${demo ? "?demo=1" : ""}`;
+
+export function diagnosisOptions(demo = false) {
+  return requestJson<{ symptoms: string[] }>(diagnosisUrl("options", demo));
 }
 
-export function diagnosisQuestions() {
-  return requestJson<{ questions: DiagnosisQuestion[] }>("/api/diagnosis/questions", {
+export function diagnosisQuestions(demo = false) {
+  return requestJson<{ questions: DiagnosisQuestion[] }>(diagnosisUrl("questions", demo), {
     cache: "no-store",
   });
 }
 
-export function preliminaryDiagnosis(payload: { answers: Record<string, unknown> }) {
-  return requestJson<PreliminaryDiagnosisResponse>("/api/diagnosis/preliminary", {
+export function preliminaryDiagnosis(payload: { answers: Record<string, unknown> }, demo = false) {
+  return requestJson<PreliminaryDiagnosisResponse>(diagnosisUrl("preliminary", demo), {
     method: "POST",
     body: JSON.stringify(payload),
   });
 }
 
-export function diagnose(payload: {
-  symptoms: string[];
-  round?: number;
-  /** Ответы на опросник — должны уходить в ML (question_vector + лаб. подсказки). */
-  answers?: Record<string, unknown>;
-}) {
-  return requestJson<DiagnosisResponse>("/api/diagnosis/predict", {
+export function diagnose(
+  payload: {
+    symptoms: string[];
+    round?: number;
+    /** Ответы на опросник — должны уходить в ML (question_vector + лаб. подсказки). */
+    answers?: Record<string, unknown>;
+  },
+  demo = false,
+) {
+  return requestJson<DiagnosisResponse>(diagnosisUrl("predict", demo), {
     method: "POST",
     body: JSON.stringify(payload),
   });
@@ -274,10 +283,13 @@ export function listDoctors(params?: { region?: string; specialization?: string 
 }
 
 export function createAppointment(payload: { doctorId: string; startsAt: string; reason: string }) {
-  return requestJson<{ ok: boolean; source: string; mode: string; appointment: Appointment | null }>("/api/appointments", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+  return requestJson<{ ok: boolean; source: string; mode: string; appointment: Appointment | null }>(
+    "/api/appointments",
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
 }
 
 export function createAppointmentViaSlot(payload: {
@@ -288,10 +300,13 @@ export function createAppointmentViaSlot(payload: {
   idLpu?: string;
   idPat?: string;
 }) {
-  return requestJson<{ ok: boolean; source: string; mode: string; appointment: Appointment | null }>("/api/appointments", {
-    method: "POST",
-    body: JSON.stringify(payload),
-  });
+  return requestJson<{ ok: boolean; source: string; mode: string; appointment: Appointment | null }>(
+    "/api/appointments",
+    {
+      method: "POST",
+      body: JSON.stringify(payload),
+    },
+  );
 }
 
 export function listMyAppointments() {

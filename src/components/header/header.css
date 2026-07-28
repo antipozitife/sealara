@@ -70,6 +70,10 @@
   justify-content: center;
 }
 
+.site-menu-toggle {
+  display: none;
+}
+
 .site-nav-link {
   display: inline-flex;
   align-items: center;
@@ -133,20 +137,21 @@
 
 @media (max-width: 640px) {
   .site-header {
-    grid-template-columns: 1fr;
-    justify-items: center;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px;
+    margin-bottom: 24px;
   }
 
   .site-logo {
     grid-column: 1;
-    justify-self: center;
+    justify-self: start;
     margin-left: 0;
     font-size: 1.42rem;
   }
 
   .site-logo-img {
-    height: 96px;
-    max-width: min(300px, 72vw);
+    height: 72px;
+    max-width: min(240px, 62vw);
   }
 
   .site-logo-text {
@@ -155,12 +160,45 @@
 
   .site-nav {
     grid-column: 1;
+    grid-column-end: 3;
+    display: none;
+    width: 100%;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.58);
+    box-shadow: 0 12px 28px rgba(72, 60, 160, 0.12);
+  }
+
+  .site-nav--open {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .site-menu-toggle {
+    grid-column: 2;
+    display: inline-flex;
+    align-items: center;
     justify-content: center;
-    gap: 25px;
+    width: 44px;
+    height: 44px;
+    border: 1px solid rgba(77, 74, 162, 0.24);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.82);
+    color: #4d4aa2;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .site-menu-toggle:focus-visible {
+    outline: 3px solid rgba(77, 74, 162, 0.35);
+    outline-offset: 3px;
   }
 
   .site-nav-link {
-    font-size: 1.08rem;
-    padding: 10px 18px;
+    min-height: 42px;
+    padding: 8px 10px;
+    font-size: 0.98rem;
+    box-shadow: none;
   }
 }

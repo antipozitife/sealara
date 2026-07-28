@@ -24,7 +24,14 @@
   max-height: 100dvh;
   overflow: hidden;
   box-sizing: border-box;
-  font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
   background:
     radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.45) 0 12%, transparent 13%),
     radial-gradient(circle at 82% 14%, rgba(255, 255, 255, 0.55) 0 2%, transparent 3%),
@@ -33,7 +40,13 @@
     radial-gradient(circle at 78% 21%, rgba(255, 255, 255, 0.18) 0 1px, transparent 1px),
     linear-gradient(180deg, #b0caff 0%, #ffffff 100%);
   background-repeat: no-repeat;
-  background-size: cover, cover, cover, auto, auto, 100% 100%;
+  background-size:
+    cover,
+    cover,
+    cover,
+    auto,
+    auto,
+    100% 100%;
   background-attachment: fixed, fixed, fixed, fixed, fixed, fixed;
 }
 
@@ -69,7 +82,14 @@
 }
 
 .nf-bg404-text {
-  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-family:
+    "Inter",
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
   font-weight: 700;
   font-size: 420px;
   letter-spacing: -0.08em;
@@ -196,7 +216,8 @@
   pointer-events: none;
   z-index: 2;
   opacity: 0.85;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 2px, transparent 3px) center/100% 100% no-repeat;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.95) 0 2px, transparent 3px) center/100% 100%
+    no-repeat;
   filter: drop-shadow(0 0 7px rgba(255, 255, 255, 0.85));
 }
 

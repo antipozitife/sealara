@@ -1,0 +1,24 @@
+.medical-notice {
+  display: grid;
+  gap: 8px;
+  padding: 16px 18px;
+  border: 1px solid rgba(180, 83, 9, 0.3);
+  border-radius: 16px;
+  background: rgba(255, 247, 237, 0.92);
+  color: #5f370e;
+  line-height: 1.5;
+}
+
+.medical-notice strong {
+  color: #8a3f08;
+}
+
+.medical-notice a {
+  color: #7c2d12;
+  font-weight: 800;
+}
+
+.medical-notice--compact {
+  margin-top: 18px;
+  font-size: 0.9rem;
+}

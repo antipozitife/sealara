@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Footer } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
 import { detectRegionByPhone, login, register } from "../../lib/auth-api";
@@ -21,6 +21,10 @@ export const AuthPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const requestedNext = new URLSearchParams(location.search).get("next");
+  const nextPath =
+    requestedNext?.startsWith("/") && !requestedNext.startsWith("//") ? requestedNext : "/profile";
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,7 +36,7 @@ export const AuthPage: React.FC = () => {
       } else {
         await login({ email, password });
       }
-      navigate("/profile");
+      navigate(nextPath);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Не удалось выполнить вход");
     } finally {
@@ -107,7 +111,11 @@ export const AuthPage: React.FC = () => {
                   </label>
                   <label>
                     Пол
-                    <select value={gender} onChange={(e) => setGender(e.target.value as "м" | "ж" | "")} required>
+                    <select
+                      value={gender}
+                      onChange={(e) => setGender(e.target.value as "м" | "ж" | "")}
+                      required
+                    >
                       <option value="">Выберите</option>
                       <option value="м">м</option>
                       <option value="ж">ж</option>
@@ -118,7 +126,12 @@ export const AuthPage: React.FC = () => {
                 <div className="auth-grid">
                   <label>
                     Телефон
-                    <input type="tel" value={phone} onChange={(e) => void onPhoneChange(e.target.value)} required />
+                    <input
+                      type="tel"
+                      value={phone}
+                      onChange={(e) => void onPhoneChange(e.target.value)}
+                      required
+                    />
                   </label>
                   <label>
                     Регион

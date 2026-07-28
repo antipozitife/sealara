@@ -9,14 +9,14 @@ export const Footer = () => {
     <footer className="footer">
       <div className="footer-col">
         <Link to="/diseases">энциклопедия болезней</Link>
-        <Link to="/diagnosis">диагностика болезней</Link>
-        <Link to="/doctors">сборник врачей</Link>
+        <Link to="/diagnosis?mode=demo">справочный анализ симптомов</Link>
+        <Link to="/doctors">поиск специалиста</Link>
         <Link to="/profile">мой профиль</Link>
       </div>
 
       <div className="footer-note">
-        Информация, опубликованная на сайте, предназначена только для ознакомления и не заменяет консультацию с
-        медицинским специалистом. Обязательно проконсультируйтесь с врачом!
+        Учебный сервис. Не оказывает медицинские услуги, не устанавливает диагноз и не назначает лечение.
+        Автоматические результаты могут быть ошибочными. При угрозе жизни звоните 112 или 103.
       </div>
 
       <div className="footer-col right">

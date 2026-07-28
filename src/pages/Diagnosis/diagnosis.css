@@ -8,6 +8,28 @@
   padding: 12px 0 28px;
 }
 
+.diagnosis-demo-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 18px;
+  border: 1px solid rgba(109, 40, 217, 0.28);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.72);
+  color: rgba(36, 48, 86, 0.86);
+}
+
+.diagnosis-demo-banner strong,
+.diagnosis-demo-banner a {
+  color: #5f1c87;
+}
+
+.diagnosis-demo-banner a {
+  flex: 0 0 auto;
+  font-weight: 700;
+}
+
 .diagnosis-card {
   background: rgba(255, 255, 255, 0.2);
   border: 1px solid rgba(255, 255, 255, 0.35);
@@ -21,6 +43,10 @@
 .diagnosis-card h2 {
   margin: 0 0 10px;
   color: #5f1c87;
+}
+
+.diagnosis-consent .diagnosis-btn {
+  margin-top: 18px;
 }
 
 .diagnosis-card p {
@@ -190,6 +216,11 @@
 }
 
 @media (max-width: 860px) {
+  .diagnosis-demo-banner {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
   .diagnosis-toolbar {
     flex-direction: column;
   }

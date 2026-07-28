@@ -1,0 +1,7 @@
+dist
+node_modules
+coverage
+models
+Database
+package-lock.json
+src/data/*.json

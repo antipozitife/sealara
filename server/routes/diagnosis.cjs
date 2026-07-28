@@ -19,7 +19,19 @@ function registerDiagnosisRoutes(app, deps) {
     rememberMlPrediction,
   } = deps;
 
-  app.get("/api/diagnosis/options", authMiddleware, async (_, res) => {
+  const diagnosisAccess = (req, res, next) => {
+    if (req.query?.demo === "1") {
+      req.isDiagnosisDemo = true;
+      req.user = {
+        id: `demo:${req.ip || "anonymous"}`,
+        profile: {},
+      };
+      return next();
+    }
+    return authMiddleware(req, res, next);
+  };
+
+  app.get("/api/diagnosis/options", diagnosisAccess, async (_, res) => {
     const vocab = await catalogSymptomsViaMlService();
     if (!vocab || vocab._error) {
       return res.status(Number(vocab?.status || 503)).json({
@@ -29,13 +41,13 @@ function registerDiagnosisRoutes(app, deps) {
     return res.json({ symptoms: Array.isArray(vocab.symptoms) ? vocab.symptoms : [] });
   });
 
-  app.get("/api/diagnosis/questions", authMiddleware, (_, res) => {
+  app.get("/api/diagnosis/questions", diagnosisAccess, (_, res) => {
     res.set("Cache-Control", "private, no-store, no-cache, must-revalidate");
     res.set("Pragma", "no-cache");
     return res.json({ questions: KEY_QUESTIONS });
   });
 
-  app.post("/api/diagnosis/preliminary", authMiddleware, validateBody(diagnosisPreliminarySchema), async (req, res) => {
+  app.post("/api/diagnosis/preliminary", diagnosisAccess, validateBody(diagnosisPreliminarySchema), async (req, res) => {
     const answers = req.body?.answers || {};
     const serviceResult = await preliminaryViaMlService({
       profile: req.user.profile || {},
@@ -50,7 +62,7 @@ function registerDiagnosisRoutes(app, deps) {
     return res.json(serviceResult);
   });
 
-  app.post("/api/diagnosis/predict", authMiddleware, validateBody(diagnosisPredictSchema), async (req, res) => {
+  app.post("/api/diagnosis/predict", diagnosisAccess, validateBody(diagnosisPredictSchema), async (req, res) => {
     const round = Number(req.body?.round) || 1;
     const symptomsRaw = Array.isArray(req.body?.symptoms) ? req.body.symptoms : [];
     if (symptomsRaw.length === 0) return res.status(400).json({ error: "Выберите хотя бы один симптом" });
@@ -118,13 +130,15 @@ function registerDiagnosisRoutes(app, deps) {
         error: serviceResult.detail || "ML service error",
       });
     }
-    const queryId = await appendRecentQuery(req.user.id, {
-      symptoms,
-      answers: req.body?.answers || {},
-      timestamp: new Date().toISOString(),
-      source: "ml-service",
-    });
-    if (serviceResult.predictions?.[0]?.score > confidenceThreshold) {
+    const queryId = req.isDiagnosisDemo
+      ? null
+      : await appendRecentQuery(req.user.id, {
+          symptoms,
+          answers: req.body?.answers || {},
+          timestamp: new Date().toISOString(),
+          source: "ml-service",
+        });
+    if (!req.isDiagnosisDemo && serviceResult.predictions?.[0]?.score > confidenceThreshold) {
       await sqlPool.query(
         "INSERT INTO doctor_feedback (user_id, predicted_disease_id, confidence, query_id) VALUES (?, ?, ?, ?)",
         [req.user.id, serviceResult.predictions[0].id, serviceResult.predictions[0].score, queryId || null]

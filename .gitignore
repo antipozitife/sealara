@@ -1,8 +1,14 @@
 uploads/
 node_modules/
 .venv/
+__pycache__/
+.pytest_cache/
 dist/
+storybook-static/
+test-results/
+playwright-report/
 .DS_Store
+~$*
 *.log
 .env
 .env.local

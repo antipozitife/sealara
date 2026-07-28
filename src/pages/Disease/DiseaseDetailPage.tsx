@@ -2,6 +2,7 @@ import React, { useLayoutEffect, useMemo } from "react";
 import { Link, Navigate, useParams } from "react-router-dom";
 import { Footer } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
+import { MedicalNotice } from "../../components/MedicalNotice";
 import diseasesData from "../../data/diseases.json";
 import sealReading from "../../images/seal-reading.webp";
 import "../../styles/layout-shell.css";
@@ -55,7 +56,10 @@ function withTrailingPunctuation(text: string, isLast: boolean): string {
 }
 
 function excerptForCard(text: string): string {
-  return text.replace(/\s*\r?\n\s*/g, " ").replace(/\s+/g, " ").trim();
+  return text
+    .replace(/\s*\r?\n\s*/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 export const DiseaseDetailPage: React.FC = () => {
@@ -97,13 +101,20 @@ export const DiseaseDetailPage: React.FC = () => {
 
         <article className="disease-article">
           <h1 className="disease-title">{disease.name}</h1>
+          <MedicalNotice />
 
           {definition && (
             <section className="disease-section disease-section--lead disease-section--definition">
               <h2>Определение</h2>
               <div className="disease-definition-layout">
                 <div className="disease-body disease-body--clamped">{definition}</div>
-                {imageSrc && <img className="disease-definition-image" src={imageSrc} alt={`Иллюстрация: ${disease.name}`} />}
+                {imageSrc && (
+                  <img
+                    className="disease-definition-image"
+                    src={imageSrc}
+                    alt={`Иллюстрация: ${disease.name}`}
+                  />
+                )}
               </div>
             </section>
           )}

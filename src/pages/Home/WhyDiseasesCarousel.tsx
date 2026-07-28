@@ -17,7 +17,10 @@ type Props = {
 
 /** Одна строка без абзацев — иначе line-clamp считает пустые строки и многоточие оказывается не на последней видимой строке текста */
 function excerptForCarousel(text: string): string {
-  return text.replace(/\s*\r?\n\s*/g, " ").replace(/\s+/g, " ").trim();
+  return text
+    .replace(/\s*\r?\n\s*/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function shuffleCopy<T>(array: readonly T[]): T[] {
@@ -37,11 +40,7 @@ export const WhyDiseasesCarousel: React.FC<Props> = ({ items = defaultItems }) =
     <div className="why-carousel-wrapper">
       <div className="why-carousel-track">
         {duplicatedData.map((row, index) => (
-          <Link
-            className="why-carousel-card"
-            to={`/disease/${row.id}`}
-            key={`${row.id}-${index}`}
-          >
+          <Link className="why-carousel-card" to={`/disease/${row.id}`} key={`${row.id}-${index}`}>
             <span className="why-carousel-card-title">{row.disease}</span>
             <div className="why-carousel-card-body">{excerptForCarousel(row.excerpt)}</div>
           </Link>

@@ -2,14 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Footer } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
-import {
-  Appointment,
-  createAppointmentViaSlot,
-  DoctorCard,
-  listDoctors,
-  listMyAppointments,
-  meOptional,
-} from "../../lib/auth-api";
+import type { Appointment, DoctorCard } from "../../lib/auth-api";
+import { createAppointmentViaSlot, listDoctors, listMyAppointments, meOptional } from "../../lib/auth-api";
 import "../../styles/layout-shell.css";
 import "./doctors.css";
 
@@ -68,11 +62,11 @@ export const DoctorsPage: React.FC = () => {
 
   const selectedDoctor = useMemo(
     () => doctors.find((doctor) => doctor.id === selectedDoctorId) || null,
-    [doctors, selectedDoctorId]
+    [doctors, selectedDoctorId],
   );
   const selectedSlot = useMemo(
     () => (selectedDoctor?.slots || []).find((slot) => slot.idAppointment === selectedSlotId) || null,
-    [selectedDoctor, selectedSlotId]
+    [selectedDoctor, selectedSlotId],
   );
 
   useEffect(() => {
@@ -111,7 +105,9 @@ export const DoctorsPage: React.FC = () => {
     return (
       <div className="shell doctors-page">
         <Header />
-        <main id="main-content" className="doctors-main">Загрузка врачей...</main>
+        <main id="main-content" className="doctors-main">
+          Загрузка врачей...
+        </main>
         <Footer />
       </div>
     );
@@ -137,7 +133,10 @@ export const DoctorsPage: React.FC = () => {
             ) : (
               <ul className="doctors-list">
                 {doctors.map((doctor) => (
-                  <li key={doctor.id} className={`doctor-card${selectedDoctorId === doctor.id ? " doctor-card--active" : ""}`}>
+                  <li
+                    key={doctor.id}
+                    className={`doctor-card${selectedDoctorId === doctor.id ? " doctor-card--active" : ""}`}
+                  >
                     <button type="button" onClick={() => setSelectedDoctorId(doctor.id)}>
                       <strong>{doctor.fullName}</strong>
                       <span>{doctor.specialization}</span>
@@ -155,7 +154,12 @@ export const DoctorsPage: React.FC = () => {
             <form onSubmit={onBook} className="book-form">
               <label>
                 Выбранный врач
-                <input value={selectedDoctor ? `${selectedDoctor.fullName} (${selectedDoctor.specialization})` : ""} readOnly />
+                <input
+                  value={
+                    selectedDoctor ? `${selectedDoctor.fullName} (${selectedDoctor.specialization})` : ""
+                  }
+                  readOnly
+                />
               </label>
               <label>
                 Дата и время
@@ -164,7 +168,9 @@ export const DoctorsPage: React.FC = () => {
                     value={selectedSlotId}
                     onChange={(e) => {
                       setSelectedSlotId(e.target.value);
-                      const chosen = (selectedDoctor?.slots || []).find((slot) => slot.idAppointment === e.target.value);
+                      const chosen = (selectedDoctor?.slots || []).find(
+                        (slot) => slot.idAppointment === e.target.value,
+                      );
                       setStartsAt(chosen?.visitStart || "");
                     }}
                     required
@@ -173,7 +179,8 @@ export const DoctorsPage: React.FC = () => {
                     <option value="">Выберите талон</option>
                     {(selectedDoctor?.slots || []).map((slot) => (
                       <option key={slot.idAppointment} value={slot.idAppointment}>
-                        {formatDate(slot.visitStart)}{slot.room ? `, каб. ${slot.room}` : ""}
+                        {formatDate(slot.visitStart)}
+                        {slot.room ? `, каб. ${slot.room}` : ""}
                       </option>
                     ))}
                   </select>
