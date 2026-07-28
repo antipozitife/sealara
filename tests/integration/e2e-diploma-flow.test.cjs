@@ -1,6 +1,6 @@
 const nock = require("nock");
 const { app, ensureSqlSchema } = require("../../server/index.cjs");
-const { withCsrfAgent } = require("../setup/http-helpers.cjs");
+const { cookieHeader, withCsrfAgent } = require("../setup/http-helpers.cjs");
 const { deleteUserByEmail, ensureDisease, getTestPool } = require("../setup/test-db.cjs");
 
 const ML = process.env.ML_SERVICE_URL || "http://127.0.0.1:19999";
@@ -92,7 +92,7 @@ describeDb("E2E: registration → diagnosis → doctor confirm → ML feedback",
       .post("/api/diagnosis/predict")
       .set("Origin", predCtx.origin)
       .set("x-csrf-token", predCtx.csrf)
-      .set("Cookie", patientCookies)
+      .set("Cookie", cookieHeader(patientCookies))
       .send({ symptoms: ["кашель"], answers: {}, round: 1 });
     expect(predRes.status).toBe(200);
 
@@ -120,7 +120,7 @@ describeDb("E2E: registration → diagnosis → doctor confirm → ML feedback",
       .post("/api/doctor/confirm")
       .set("Origin", confCtx.origin)
       .set("x-csrf-token", confCtx.csrf)
-      .set("Cookie", doctorCookies)
+      .set("Cookie", cookieHeader(doctorCookies))
       .send({ feedbackId, confirmedDiseaseId: diseaseId });
     expect(confRes.status).toBe(200);
     expect(confRes.body.ok).toBe(true);

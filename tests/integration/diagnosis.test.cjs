@@ -1,6 +1,6 @@
 const nock = require("nock");
 const { app, ensureSqlSchema } = require("../../server/index.cjs");
-const { withCsrfAgent } = require("../setup/http-helpers.cjs");
+const { cookieHeader, withCsrfAgent } = require("../setup/http-helpers.cjs");
 const { mockMlHappyPath } = require("../setup/mock-ml.cjs");
 const { deleteUserByEmail } = require("../setup/test-db.cjs");
 
@@ -52,7 +52,7 @@ describeDb("Diagnosis predict (mocked ML)", () => {
       .post("/api/diagnosis/predict")
       .set("Origin", predCtx.origin)
       .set("x-csrf-token", predCtx.csrf)
-      .set("Cookie", cookies)
+      .set("Cookie", cookieHeader(cookies))
       .send({ symptoms: ["кашель"], answers: {}, round: 1 });
     expect(res.status).toBe(200);
     expect(Array.isArray(res.body.predictions)).toBe(true);

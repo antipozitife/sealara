@@ -12,6 +12,14 @@ function parseCookiePair(setCookieHeaders, name) {
   return "";
 }
 
+function cookieHeader(setCookieHeaders) {
+  const list = Array.isArray(setCookieHeaders) ? setCookieHeaders : [setCookieHeaders];
+  return list
+    .map((line) => String(line || "").split(";")[0])
+    .filter(Boolean)
+    .join("; ");
+}
+
 /**
  * @param {import('express').Express} app
  */
@@ -23,4 +31,4 @@ async function withCsrfAgent(app) {
   return { agent, csrf, origin };
 }
 
-module.exports = { parseCookiePair, withCsrfAgent, CSRF_COOKIE, CSRF_HEADER };
+module.exports = { parseCookiePair, cookieHeader, withCsrfAgent, CSRF_COOKIE, CSRF_HEADER };

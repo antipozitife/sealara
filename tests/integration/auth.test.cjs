@@ -1,6 +1,6 @@
 const nock = require("nock");
 const { app, ensureSqlSchema } = require("../../server/index.cjs");
-const { withCsrfAgent } = require("../setup/http-helpers.cjs");
+const { cookieHeader, withCsrfAgent } = require("../setup/http-helpers.cjs");
 const { mockMlHappyPath } = require("../setup/mock-ml.cjs");
 const { deleteUserByEmail } = require("../setup/test-db.cjs");
 
@@ -74,7 +74,7 @@ describeDb("Auth (JWT cookies + refresh)", () => {
       .post("/api/auth/refresh")
       .set("Origin", refreshCtx.origin)
       .set("x-csrf-token", refreshCtx.csrf)
-      .set("Cookie", [refreshCookie]);
+      .set("Cookie", cookieHeader(refreshCookie));
     expect(res.status).toBe(200);
     expect(res.body.ok).toBe(true);
   });
@@ -95,7 +95,7 @@ describeDb("Auth (JWT cookies + refresh)", () => {
       .post("/api/auth/logout")
       .set("Origin", logoutCtx.origin)
       .set("x-csrf-token", logoutCtx.csrf)
-      .set("Cookie", cookies);
+      .set("Cookie", cookieHeader(cookies));
     expect(logoutRes.status).toBe(200);
 
     const refreshCtx = await withCsrfAgent(app);
@@ -103,7 +103,7 @@ describeDb("Auth (JWT cookies + refresh)", () => {
       .post("/api/auth/refresh")
       .set("Origin", refreshCtx.origin)
       .set("x-csrf-token", refreshCtx.csrf)
-      .set("Cookie", [refreshCookie]);
+      .set("Cookie", cookieHeader(refreshCookie));
     expect(refreshRes.status).toBe(401);
   });
 });

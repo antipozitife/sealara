@@ -1,6 +1,6 @@
 const nock = require("nock");
 const { app, ensureSqlSchema, resetMlBreakerForTests } = require("../../server/index.cjs");
-const { withCsrfAgent } = require("../setup/http-helpers.cjs");
+const { cookieHeader, withCsrfAgent } = require("../setup/http-helpers.cjs");
 const { deleteUserByEmail } = require("../setup/test-db.cjs");
 
 const ML = (process.env.ML_SERVICE_URL || "http://127.0.0.1:19999").replace(/\/+$/, "");
@@ -61,7 +61,7 @@ describeDb("ML circuit breaker (shared opossum)", () => {
         .post("/api/diagnosis/predict")
         .set("Origin", ctx.origin)
         .set("x-csrf-token", ctx.csrf)
-        .set("Cookie", cookies)
+        .set("Cookie", cookieHeader(cookies))
         .send({ symptoms: ["кашель"], answers: {}, round: 1 });
       if (res.status === 503) {
         saw503 = true;
