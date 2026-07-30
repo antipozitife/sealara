@@ -39,6 +39,7 @@ const PageLoader = () => (
 
 const App = () => (
   <BrowserRouter>
+    <span id="page-top" className="page-top-marker" aria-hidden="true" />
     <ConsoleErrorRedirect />
     <AppErrorBoundary>
       <Suspense fallback={<PageLoader />}>

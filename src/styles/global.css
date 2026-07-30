@@ -40,6 +40,7 @@ html {
   background-repeat: no-repeat;
   background-size: 100% 100%;
   background-attachment: fixed;
+  scroll-behavior: smooth;
 }
 
 body {
@@ -80,6 +81,10 @@ body::before {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   body::before {
     animation: none;
     transform: none;
@@ -89,6 +94,15 @@ body::before {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.page-top-marker {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 1px;
+  pointer-events: none;
 }
 
 .visually-hidden {
