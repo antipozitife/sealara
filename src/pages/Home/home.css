@@ -689,6 +689,10 @@
     grid-template-columns: 1fr;
   }
 
+  .why {
+    padding-top: 56px;
+  }
+
   .why-visual {
     max-width: 420px;
     margin: 0 auto;
@@ -726,14 +730,18 @@
   .cta-figure {
     justify-self: center;
     width: min(92vw, 640px);
-    height: min(520px, 95vw);
-    min-height: min(380px, 85vw);
+    height: min(400px, 75vw);
+    min-height: min(280px, 60vw);
     margin: 0 auto;
   }
 
   .cta-seal-happy {
-    width: calc(var(--cta-circle) * 2.76 * 0.67 * 1.2 * 1.15 * 0.88);
+    width: calc(var(--cta-circle) * 2.76 * 0.67 * 1.2 * 1.15 * 0.75);
     transform: translate(-42%, -48%);
+  }
+
+  .cta {
+    padding-top: 8px;
   }
 }
 
@@ -791,8 +799,8 @@
   .cta-figure {
     --cta-circle: min(198px, 64vw);
     width: min(92vw, 520px);
-    height: min(440px, 120vw);
-    min-height: min(320px, 95vw);
+    height: min(330px, 90vw);
+    min-height: min(240px, 70vw);
     margin: 0 auto;
   }
 
@@ -802,7 +810,7 @@
   }
 
   .cta-seal-happy {
-    width: calc(var(--cta-circle) * 2.76 * 0.67 * 1.2 * 1.15 * 0.88);
+    width: calc(var(--cta-circle) * 2.76 * 0.67 * 1.2 * 1.15 * 0.75);
     transform: translate(-42%, -44%);
   }
 
@@ -831,5 +839,9 @@
 
   .cta-oval {
     padding: 22px 18px 28px;
+  }
+
+  .why {
+    padding-top: 36px;
   }
 }

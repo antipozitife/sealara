@@ -144,13 +144,13 @@
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     gap: 10px;
-    min-height: 116px;
+    min-height: 104px;
     margin-bottom: 4px;
-    align-items: start;
+    align-items: center;
   }
 
   .site-logo {
-    margin-top: -34px;
+    margin-top: 0;
   }
 
   .site-nav {
@@ -194,7 +194,7 @@
     font-size: 1.5rem;
     cursor: pointer;
     z-index: 1000;
-    margin-top: 14px;
+    margin-top: 0;
   }
 
   .site-menu-toggle--open {
@@ -234,7 +234,7 @@
     grid-column: 1;
     justify-self: start;
     margin-left: 0;
-    margin-top: -24px;
+    margin-top: 0;
     font-size: 1.62rem;
   }
 
@@ -245,6 +245,17 @@
 
   .site-logo-text {
     margin-left: clamp(-2.4rem, -11vw, -0.65rem);
+  }
+}
+
+@media (max-width: 1200px) {
+  .diseases-page .site-header,
+  .disease-page .site-header,
+  .doctors-page .site-header,
+  .profile-page .site-header,
+  .auth-page .site-header,
+  .diagnosis-page .site-header {
+    margin-bottom: -12px;
   }
 }
 

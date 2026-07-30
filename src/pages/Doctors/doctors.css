@@ -122,8 +122,19 @@
 }
 
 @media (max-width: 900px) {
+  .doctors-main {
+    width: min(100%, 720px);
+    margin-inline: auto;
+    padding-top: 8px;
+  }
+
+  .doctors-hero {
+    text-align: center;
+  }
+
   .doctors-grid {
     grid-template-columns: 1fr;
+    width: 100%;
   }
 
   .doctors-grid > .doctors-panel:first-child {
@@ -142,5 +153,9 @@
     min-height: 52px;
     font-size: 1.12rem;
     font-weight: 800;
+  }
+
+  .doctors-panel {
+    width: 100%;
   }
 }
