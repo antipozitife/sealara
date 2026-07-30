@@ -207,4 +207,9 @@
   .profile-row:not(.profile-gender) {
     grid-template-columns: 1fr;
   }
+
+  .profile-btn {
+    min-height: 50px;
+    font-size: 1.12rem;
+  }
 }

@@ -157,5 +157,31 @@
 
   .doctors-panel {
     width: 100%;
+    text-align: center;
+  }
+
+  .book-form {
+    justify-items: center;
+  }
+
+  .book-form label {
+    width: 100%;
+    align-items: center;
+    text-align: center;
+  }
+
+  .book-form input,
+  .book-form textarea,
+  .book-form select {
+    width: min(100%, 560px);
+    text-align: center;
+  }
+
+  .book-form button {
+    width: min(100%, 560px);
+  }
+
+  .appointments-list li {
+    text-align: center;
   }
 }
