@@ -83,6 +83,9 @@
 .book-form input,
 .book-form textarea,
 .book-form select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
   border: 1px solid #d9d5e8;
   border-radius: 10px;
   padding: 10px;
