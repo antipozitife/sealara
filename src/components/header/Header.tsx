@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { isFrontendDemo, meOptional } from "../../lib/auth-api";
+import { hasFrontendDemoSession, isFrontendDemo, meOptional } from "../../lib/auth-api";
 import sealaraLogo from "../../images/sealara-logo-192.webp";
 import "./header.css";
 
@@ -13,7 +13,9 @@ const NAV_ITEMS = [
 
 export const Header = () => {
   const location = useLocation();
-  const [isAuthenticated, setIsAuthenticated] = useState(Boolean(isFrontendDemo));
+  const [isAuthenticated, setIsAuthenticated] = useState(() =>
+    isFrontendDemo ? hasFrontendDemoSession() : false,
+  );
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -51,8 +53,6 @@ export const Header = () => {
         <img className="site-logo-img" src={sealaraLogo} alt="" decoding="async" width="192" height="192" />
         <span className="site-logo-text">Sealara</span>
       </Link>
-      {isFrontendDemo && <span className="frontend-demo-badge">просмотр фронтенда</span>}
-
       <button
         type="button"
         className={`site-menu-toggle${menuOpen ? " site-menu-toggle--open" : ""}`}

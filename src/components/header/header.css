@@ -60,20 +60,6 @@
   pointer-events: none;
 }
 
-.frontend-demo-badge {
-  position: absolute;
-  top: 104px;
-  left: 18px;
-  padding: 5px 10px;
-  border: 1px solid rgba(95, 28, 135, 0.2);
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
-  color: #5f1c87;
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-}
-
 .site-nav {
   position: absolute;
   left: 50%;
@@ -251,11 +237,6 @@
 
   .site-logo-text {
     margin-left: clamp(-2.4rem, -11vw, -0.65rem);
-  }
-
-  .frontend-demo-badge {
-    top: 65px;
-    left: 80px;
   }
 }
 

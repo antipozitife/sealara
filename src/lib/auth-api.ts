@@ -97,6 +97,19 @@ const CSRF_HEADER_NAME = "x-csrf-token";
 const IS_STANDALONE = typeof __SEALARA_STANDALONE__ !== "undefined" && __SEALARA_STANDALONE__;
 export const isFrontendDemo =
   IS_STANDALONE || (typeof __SEALARA_FRONTEND_DEMO__ !== "undefined" && __SEALARA_FRONTEND_DEMO__);
+const FRONTEND_DEMO_SESSION_KEY = "sealara-frontend-demo-session";
+
+export function hasFrontendDemoSession(): boolean {
+  if (!isFrontendDemo) return false;
+  if (typeof localStorage === "undefined") return true;
+  return localStorage.getItem(FRONTEND_DEMO_SESSION_KEY) !== "signed-out";
+}
+
+function setFrontendDemoSession(active: boolean) {
+  if (typeof localStorage === "undefined") return;
+  if (active) localStorage.setItem(FRONTEND_DEMO_SESSION_KEY, "signed-in");
+  else localStorage.setItem(FRONTEND_DEMO_SESSION_KEY, "signed-out");
+}
 
 let demoProfile: UserProfile = {
   surname: "Демонстрационный",
@@ -107,11 +120,13 @@ let demoProfile: UserProfile = {
   phone: "+7 900 000-00-00",
   region: "Санкт-Петербург",
 };
+let demoEmail = "demo@sealara.local";
+let demoName = "Демо-профиль";
 
 const demoUser = (): AuthUser => ({
   id: "frontend-demo-user",
-  email: "demo@sealara.local",
-  name: "Демо-профиль",
+  email: demoEmail,
+  name: demoName,
   createdAt: "2026-01-01T00:00:00.000Z",
   profile: demoProfile,
   recentQueries: ["Головная боль и слабость", "Насморк и чихание", "Кашель"],
@@ -203,7 +218,22 @@ export function register(payload: {
   region: string;
   password: string;
 }) {
-  if (isFrontendDemo) return Promise.resolve({ user: demoUser() });
+  if (isFrontendDemo) {
+    demoProfile = {
+      ...demoProfile,
+      surname: payload.surname,
+      firstName: payload.name,
+      middleName: payload.patronymic,
+      birthDate: payload.birthDate,
+      gender: payload.gender === "м" ? "male" : payload.gender === "ж" ? "female" : "",
+      phone: payload.phone,
+      region: payload.region,
+    };
+    demoEmail = payload.email;
+    demoName = `${payload.name} ${payload.surname}`.trim();
+    setFrontendDemoSession(true);
+    return Promise.resolve({ user: demoUser() });
+  }
   return requestJson<AuthResponse>("/api/auth/register", {
     method: "POST",
     body: JSON.stringify(payload),
@@ -219,7 +249,11 @@ export function detectRegionByPhone(payload: { phone: string }) {
 }
 
 export function login(payload: { email: string; password: string }) {
-  if (isFrontendDemo) return Promise.resolve({ user: demoUser() });
+  if (isFrontendDemo) {
+    demoEmail = payload.email;
+    setFrontendDemoSession(true);
+    return Promise.resolve({ user: demoUser() });
+  }
   return requestJson<AuthResponse>("/api/auth/login", {
     method: "POST",
     body: JSON.stringify(payload),
@@ -227,12 +261,18 @@ export function login(payload: { email: string; password: string }) {
 }
 
 export function logout() {
-  if (isFrontendDemo) return Promise.resolve({ ok: true });
+  if (isFrontendDemo) {
+    setFrontendDemoSession(false);
+    return Promise.resolve({ ok: true });
+  }
   return requestJson<{ ok: boolean }>("/api/auth/logout", { method: "POST" });
 }
 
 export function me() {
-  if (isFrontendDemo) return Promise.resolve({ user: demoUser() });
+  if (isFrontendDemo) {
+    if (!hasFrontendDemoSession()) return Promise.reject(new Error("Требуется вход"));
+    return Promise.resolve({ user: demoUser() });
+  }
   return requestJson<AuthResponse>("/api/auth/me");
 }
 
@@ -240,7 +280,7 @@ export function me() {
  * Проверка сессии без 401 в Network (эндпоинт `/api/auth/session` всегда отвечает 200).
  */
 export async function meOptional(): Promise<AuthResponse | null> {
-  if (isFrontendDemo) return { user: demoUser() };
+  if (isFrontendDemo) return hasFrontendDemoSession() ? { user: demoUser() } : null;
   const response = await fetch("/api/auth/session", {
     credentials: "include",
     headers: { Accept: "application/json" },
