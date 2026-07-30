@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { AppErrorBoundary } from "./components/AppErrorBoundary.tsx";
 import { ConsoleErrorRedirect } from "./components/ConsoleErrorRedirect.tsx";
+import { ScrollToTopButton } from "./components/ScrollToTopButton.tsx";
 import "./styles/global.css";
 
 const HomePage = lazy(() => import("./pages/Home/HomePage").then((module) => ({ default: module.HomePage })));
@@ -53,6 +54,7 @@ const App = () => (
           <Route path="/not-found" element={<NotFoundPage />} />
           <Route path="*" element={<Navigate to="/error/404" replace />} />
         </Routes>
+        <ScrollToTopButton />
       </Suspense>
     </AppErrorBoundary>
   </BrowserRouter>

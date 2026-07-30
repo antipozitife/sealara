@@ -1,6 +1,5 @@
 import { useId } from "react";
 import { Link } from "react-router-dom";
-import { MedicalNotice } from "../../components/MedicalNotice";
 import sealHappy from "../../images/seal-happy-800.webp";
 import sealThinking from "../../images/seal-thinking-500.webp";
 import sealWave from "../../images/seal-wave-500.webp";
@@ -31,11 +30,6 @@ export function HeroSection() {
             как это работает
           </a>
         </div>
-        <div className="hero-quick-start">
-          <span>Без регистрации · около 2 минут</span>
-          <Link to="/auth?next=%2Fdiagnosis">Уже есть аккаунт? Войти</Link>
-        </div>
-        <MedicalNotice compact />
       </div>
       <div className="hero-side">
         <div ref={revealRef} className={`speech-bubble${visible ? " speech-bubble--visible" : ""}`}>

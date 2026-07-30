@@ -33,21 +33,6 @@
   flex-wrap: wrap;
 }
 
-.hero-quick-start {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex-wrap: wrap;
-  margin-top: 14px;
-  color: rgba(36, 48, 86, 0.68);
-  font-size: 0.92rem;
-}
-
-.hero-quick-start a {
-  color: #5f1c87;
-  font-weight: 700;
-}
-
 .btn {
   display: inline-flex;
   align-items: center;
