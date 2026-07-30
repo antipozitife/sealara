@@ -4,7 +4,7 @@ import { Footer } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
 import "../../styles/layout-shell.css";
 import "./profile.css";
-import { ProfileAside, ProfileForm, ProfileHero } from "./ProfileSections";
+import { ProfileForm, ProfileHero } from "./ProfileSections";
 import { useProfile } from "./useProfile";
 
 export const ProfilePage: React.FC = () => {
@@ -21,7 +21,6 @@ export const ProfilePage: React.FC = () => {
             <ProfileHero controller={controller} />
             <section className="profile-grid" aria-label="Разделы профиля">
               <ProfileForm controller={controller} />
-              <ProfileAside controller={controller} />
             </section>
           </>
         )}

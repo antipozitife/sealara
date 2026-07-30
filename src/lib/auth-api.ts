@@ -14,6 +14,7 @@ export type AuthUser = {
   id: string;
   email: string;
   name: string;
+  role?: "patient" | "doctor";
   createdAt: string;
   profile: UserProfile;
   recentQueries: string[];
@@ -85,6 +86,7 @@ export type Appointment = {
   id: string;
   doctorId?: string;
   doctorName?: string;
+  patientName?: string;
   specialization?: string;
   startsAt: string;
   reason: string;
@@ -98,6 +100,9 @@ const IS_STANDALONE = typeof __SEALARA_STANDALONE__ !== "undefined" && __SEALARA
 export const isFrontendDemo =
   IS_STANDALONE || (typeof __SEALARA_FRONTEND_DEMO__ !== "undefined" && __SEALARA_FRONTEND_DEMO__);
 const FRONTEND_DEMO_SESSION_KEY = "sealara-frontend-demo-session";
+const FRONTEND_DEMO_ACCOUNT_KEY = "sealara-frontend-demo-account";
+const ANNA_EMAIL = "anna@sealara.local";
+const INNA_EMAIL = "inna@sealara.local";
 
 export function hasFrontendDemoSession(): boolean {
   if (!isFrontendDemo) return false;
@@ -111,24 +116,70 @@ function setFrontendDemoSession(active: boolean) {
   else localStorage.setItem(FRONTEND_DEMO_SESSION_KEY, "signed-out");
 }
 
-let demoProfile: UserProfile = {
-  surname: "Демонстрационный",
-  firstName: "Пользователь",
-  middleName: "",
-  birthDate: "01.01.1995",
-  gender: "female",
-  phone: "+7 900 000-00-00",
-  region: "Санкт-Петербург",
+type DemoAccount = {
+  id: string;
+  email: string;
+  password: string;
+  name: string;
+  role: "patient" | "doctor";
+  profile: UserProfile;
 };
-let demoEmail = "demo@sealara.local";
-let demoName = "Демо-профиль";
+
+const demoAccounts: Record<string, DemoAccount> = {
+  [ANNA_EMAIL]: {
+    id: "frontend-demo-patient",
+    email: ANNA_EMAIL,
+    password: "anna1234",
+    name: "Анна Иванова",
+    role: "patient",
+    profile: {
+      surname: "Иванова",
+      firstName: "Анна",
+      middleName: "Сергеевна",
+      birthDate: "1995-01-01",
+      gender: "female",
+      phone: "+7 900 000-00-01",
+      region: "Санкт-Петербург",
+    },
+  },
+  [INNA_EMAIL]: {
+    id: "frontend-demo-doctor",
+    email: INNA_EMAIL,
+    password: "inna1234",
+    name: "Инна Смирнова",
+    role: "doctor",
+    profile: {
+      surname: "Смирнова",
+      firstName: "Инна",
+      middleName: "Викторовна",
+      birthDate: "1988-04-12",
+      gender: "female",
+      phone: "+7 900 000-00-02",
+      region: "Санкт-Петербург",
+    },
+  },
+};
+
+function activeDemoEmail(): string {
+  if (typeof localStorage === "undefined") return ANNA_EMAIL;
+  return localStorage.getItem(FRONTEND_DEMO_ACCOUNT_KEY) || ANNA_EMAIL;
+}
+
+function setActiveDemoEmail(email: string) {
+  if (typeof localStorage !== "undefined") localStorage.setItem(FRONTEND_DEMO_ACCOUNT_KEY, email);
+}
+
+function activeDemoAccount(): DemoAccount {
+  return demoAccounts[activeDemoEmail()] || demoAccounts[ANNA_EMAIL];
+}
 
 const demoUser = (): AuthUser => ({
-  id: "frontend-demo-user",
-  email: demoEmail,
-  name: demoName,
+  id: activeDemoAccount().id,
+  email: activeDemoAccount().email,
+  name: activeDemoAccount().name,
+  role: activeDemoAccount().role,
   createdAt: "2026-01-01T00:00:00.000Z",
-  profile: demoProfile,
+  profile: activeDemoAccount().profile,
   recentQueries: ["Головная боль и слабость", "Насморк и чихание", "Кашель"],
 });
 
@@ -146,7 +197,8 @@ let demoAppointments: Appointment[] = [
   {
     id: "demo-appointment-1",
     doctorId: "demo-doctor-1",
-    doctorName: "Смирнова Анна Викторовна",
+    doctorName: "Смирнова Инна Викторовна",
+    patientName: "Иванова Анна Сергеевна",
     specialization: "Терапевт",
     startsAt: "2026-08-05T10:30:00.000Z",
     reason: "Демонстрационная запись",
@@ -219,18 +271,24 @@ export function register(payload: {
   password: string;
 }) {
   if (isFrontendDemo) {
-    demoProfile = {
-      ...demoProfile,
-      surname: payload.surname,
-      firstName: payload.name,
-      middleName: payload.patronymic,
-      birthDate: payload.birthDate,
-      gender: payload.gender === "м" ? "male" : payload.gender === "ж" ? "female" : "",
-      phone: payload.phone,
-      region: payload.region,
+    const email = payload.email.trim().toLowerCase();
+    demoAccounts[email] = {
+      id: `frontend-demo-${Date.now()}`,
+      email,
+      password: payload.password,
+      name: `${payload.name} ${payload.surname}`.trim(),
+      role: "patient",
+      profile: {
+        surname: payload.surname,
+        firstName: payload.name,
+        middleName: payload.patronymic,
+        birthDate: payload.birthDate,
+        gender: payload.gender === "м" ? "male" : payload.gender === "ж" ? "female" : "",
+        phone: payload.phone,
+        region: payload.region,
+      },
     };
-    demoEmail = payload.email;
-    demoName = `${payload.name} ${payload.surname}`.trim();
+    setActiveDemoEmail(email);
     setFrontendDemoSession(true);
     return Promise.resolve({ user: demoUser() });
   }
@@ -250,7 +308,12 @@ export function detectRegionByPhone(payload: { phone: string }) {
 
 export function login(payload: { email: string; password: string }) {
   if (isFrontendDemo) {
-    demoEmail = payload.email;
+    const email = payload.email.trim().toLowerCase();
+    const account = demoAccounts[email];
+    if (!account || account.password !== payload.password) {
+      return Promise.reject(new Error("Неверный email или пароль"));
+    }
+    setActiveDemoEmail(email);
     setFrontendDemoSession(true);
     return Promise.resolve({ user: demoUser() });
   }
@@ -302,8 +365,9 @@ export async function meOptional(): Promise<AuthResponse | null> {
 
 export function saveProfile(profile: Partial<UserProfile>) {
   if (isFrontendDemo) {
-    demoProfile = { ...demoProfile, ...profile };
-    return Promise.resolve({ profile: demoProfile });
+    const account = activeDemoAccount();
+    account.profile = { ...account.profile, ...profile };
+    return Promise.resolve({ profile: account.profile });
   }
   return requestJson<{ profile: UserProfile }>("/api/profile", {
     method: "PUT",
@@ -324,8 +388,12 @@ export async function uploadAvatar(file: File): Promise<{ profile: UserProfile }
     reader.readAsDataURL(file);
   });
   if (isFrontendDemo) {
-    demoProfile = { ...demoProfile, avatarUrl: `data:${mimeType || "image/png"};base64,${data}` };
-    return { profile: demoProfile };
+    const account = activeDemoAccount();
+    account.profile = {
+      ...account.profile,
+      avatarUrl: `data:${mimeType || "image/png"};base64,${data}`,
+    };
+    return { profile: account.profile };
   }
   return requestJson<{ profile: UserProfile }>("/api/profile/avatar", {
     method: "POST",
@@ -335,8 +403,9 @@ export async function uploadAvatar(file: File): Promise<{ profile: UserProfile }
 
 export function deleteAvatar() {
   if (isFrontendDemo) {
-    demoProfile = { ...demoProfile, avatarUrl: undefined };
-    return Promise.resolve({ profile: demoProfile });
+    const account = activeDemoAccount();
+    account.profile = { ...account.profile, avatarUrl: undefined };
+    return Promise.resolve({ profile: account.profile });
   }
   return requestJson<{ profile: UserProfile }>("/api/profile/avatar", {
     method: "DELETE",
@@ -408,8 +477,9 @@ export function diagnose(
   demo = false,
 ) {
   if (isFrontendDemo) {
+    const profile = activeDemoAccount().profile;
     return Promise.resolve({
-      profileUsed: { age: 31, gender: demoProfile.gender, region: demoProfile.region },
+      profileUsed: { age: 31, gender: profile.gender, region: profile.region },
       predictions: [demoPrediction],
       uncertainty: 0.22,
       needClarification: false,
@@ -434,7 +504,7 @@ export function listDoctors(params?: { region?: string; specialization?: string 
           fullName: "Смирнова Анна Викторовна",
           specialization: "Терапевт",
           clinic: "Демонстрационная поликлиника",
-          region: demoProfile.region,
+          region: activeDemoAccount().profile.region,
           nextAvailableAt: "2026-08-05T10:30:00.000Z",
           slots: [
             {
@@ -477,7 +547,8 @@ export function createAppointmentViaSlot(payload: {
     const appointment: Appointment = {
       id: `demo-appointment-${demoAppointments.length + 1}`,
       doctorId: payload.doctorId,
-      doctorName: "Смирнова Анна Викторовна",
+      doctorName: "Смирнова Инна Викторовна",
+      patientName: activeDemoAccount().name,
       specialization: "Терапевт",
       startsAt: payload.startsAt,
       reason: payload.reason,

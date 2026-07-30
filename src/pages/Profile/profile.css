@@ -76,12 +76,13 @@
 
 .profile-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
 }
 
 .profile-panel {
-  min-height: 500px;
+  min-height: 0;
+  width: 100%;
   border-radius: 10px;
   background: linear-gradient(180deg, rgba(196, 223, 255, 0.44), rgba(175, 132, 230, 0.45));
   border: 1px solid rgba(255, 255, 255, 0.35);
@@ -154,17 +155,6 @@
   height: 17px;
 }
 
-.profile-list {
-  margin: 0;
-  padding-left: 20px;
-  color: rgba(32, 39, 79, 0.9);
-  line-height: 1.6;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  font-weight: 600;
-}
-
 .profile-error {
   margin-top: 10px;
   color: #9a1c3d;
@@ -201,14 +191,4 @@
   background: rgba(255, 255, 255, 0.72);
   color: #4d4aa2;
   border: 1px solid rgba(77, 74, 162, 0.25);
-}
-
-@media (max-width: 1024px) {
-  .profile-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .profile-panel {
-    min-height: auto;
-  }
 }

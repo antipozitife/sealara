@@ -28,6 +28,10 @@
   padding: 16px;
 }
 
+.doctors-panel--wide {
+  width: 100%;
+}
+
 .doctors-panel h2 {
   margin: 0 0 12px;
 }

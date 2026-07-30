@@ -163,26 +163,3 @@ export function ProfileForm({ controller }: { controller: ProfileController }) {
     </article>
   );
 }
-
-export function ProfileAside({ controller }: { controller: ProfileController }) {
-  return (
-    <>
-      <article className="profile-panel">
-        <h2>📋 Последние 3 запроса</h2>
-        <ul className="profile-list">
-          {(controller.user?.recentQueries || []).slice(0, 3).map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-      </article>
-      <article className="profile-panel">
-        <h2>⚙️ Настройки</h2>
-        <ul className="profile-list">
-          <li>Уведомления по почте</li>
-          <li>Напоминания о заполнении дневника наблюдений</li>
-          <li>Язык интерфейса</li>
-        </ul>
-      </article>
-    </>
-  );
-}

@@ -16,8 +16,8 @@ export const AuthPage: React.FC = () => {
   const [phone, setPhone] = useState(isFrontendDemo ? "+7 900 000-00-00" : "");
   const [region, setRegion] = useState(isFrontendDemo ? "Санкт-Петербург" : "");
   const [regionTouched, setRegionTouched] = useState(false);
-  const [email, setEmail] = useState(isFrontendDemo ? "demo@sealara.local" : "");
-  const [password, setPassword] = useState(isFrontendDemo ? "demo1234" : "");
+  const [email, setEmail] = useState(isFrontendDemo ? "anna@sealara.local" : "");
+  const [password, setPassword] = useState(isFrontendDemo ? "anna1234" : "");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();

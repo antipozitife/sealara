@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Footer } from "../../components/footer/Footer";
 import { Header } from "../../components/header/Header";
-import type { Appointment, DoctorCard } from "../../lib/auth-api";
+import type { Appointment, AuthUser, DoctorCard } from "../../lib/auth-api";
 import { createAppointmentViaSlot, listDoctors, listMyAppointments, meOptional } from "../../lib/auth-api";
 import "../../styles/layout-shell.css";
 import "./doctors.css";
@@ -22,6 +22,7 @@ function formatDate(value: string) {
 export const DoctorsPage: React.FC = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [doctors, setDoctors] = useState<DoctorCard[]>([]);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [selectedDoctorId, setSelectedDoctorId] = useState("");
@@ -41,6 +42,7 @@ export const DoctorsPage: React.FC = () => {
         navigate("/auth");
         return;
       }
+      if (alive) setCurrentUser(session.user);
       try {
         const [doctorsResp, appointmentsResp] = await Promise.all([listDoctors(), listMyAppointments()]);
         if (!alive) return;
@@ -107,6 +109,39 @@ export const DoctorsPage: React.FC = () => {
         <Header />
         <main id="main-content" className="doctors-main">
           Загрузка врачей...
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (currentUser?.role === "doctor") {
+    return (
+      <div className="shell doctors-page">
+        <Header />
+        <main id="main-content" className="doctors-main">
+          <section className="doctors-hero">
+            <h1>Кабинет врача</h1>
+            <p>Инна Смирнова · терапевт. Здесь показаны демонстрационные записи пациентов на приём.</p>
+          </section>
+
+          <section className="doctors-panel doctors-panel--wide">
+            <h2>Записанные пациенты</h2>
+            {appointments.length === 0 ? (
+              <p className="doctors-empty">На ближайшее время записей нет.</p>
+            ) : (
+              <ul className="appointments-list">
+                {appointments.map((appointment) => (
+                  <li key={appointment.id}>
+                    <strong>{appointment.patientName || "Пациент"}</strong>
+                    <span>{formatDate(appointment.startsAt)}</span>
+                    <span>Статус: {appointment.status}</span>
+                    <small>Причина обращения: {appointment.reason}</small>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
         </main>
         <Footer />
       </div>
