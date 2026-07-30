@@ -78,11 +78,11 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 46px;
-  padding: 12px 20px;
+  min-height: 52px;
+  padding: 14px 25px;
   border-radius: 999px;
   font-weight: 600;
-  font-size: 1.1rem;
+  font-size: 1.22rem;
   line-height: 1.2;
   white-space: nowrap;
   text-decoration: none;
@@ -138,7 +138,7 @@
   font-size: 0.78em;
 }
 
-@media (max-width: 1050px) {
+@media (max-width: 1200px) {
   .site-header {
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
@@ -202,9 +202,9 @@
 
   .site-nav-link {
     width: 100%;
-    min-height: 50px;
-    padding: 12px 18px;
-    font-size: 1.06rem;
+    min-height: 54px;
+    padding: 14px 20px;
+    font-size: 1.15rem;
     box-shadow: 0 10px 24px rgba(72, 60, 160, 0.12);
   }
 }
