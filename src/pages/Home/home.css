@@ -213,8 +213,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  transform: translateY(-0.25rem);
+  justify-content: flex-start;
+  transform: translateY(-3rem);
 }
 
 .speech-bubble-content span {
