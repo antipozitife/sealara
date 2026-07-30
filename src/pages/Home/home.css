@@ -212,8 +212,9 @@
   overflow-wrap: break-word;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  transform: translateY(-0.45rem);
+  align-items: center;
+  justify-content: center;
+  transform: translateY(-0.25rem);
 }
 
 .speech-bubble-content span {
