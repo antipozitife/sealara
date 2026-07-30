@@ -317,15 +317,15 @@ npm run dev
 
 Клиент откроется на [localhost:5173](http://localhost:5173). Для API-сценариев потребуется полное окружение:
 
-Для просмотра интерфейса без API, базы данных и ML-сервиса используйте отдельный статический контур:
+По умолчанию frontend запускается в демонстрационном режиме без API, базы данных и ML-сервиса:
 
 ```bash
-npm run dev:frontend-demo
+npm run dev
 ```
 
 В нём доступны все основные экраны: главная страница, справочник, опрос, профиль и запись к врачу. Данные
-создаются локально в браузере, а запросы к API, базе данных и ML-сервису не отправляются. Команда
-`npm run dev:standalone` сохранена как совместимый псевдоним этого режима.
+создаются локально в браузере, а запросы к API, базе данных и ML-сервису не отправляются. Команды
+`npm run dev:frontend-demo` и `npm run dev:standalone` сохранены как явные псевдонимы этого режима.
 
 ```bash
 cp .env.example .env
@@ -350,20 +350,22 @@ npm run dev:full
 
 ## Основные команды
 
-| Команда                | Назначение                       |
-| ---------------------- | -------------------------------- |
-| `npm run dev`          | Frontend dev server с hot reload |
-| `npm run test:client`  | Клиентские поведенческие тесты   |
-| `npm run test:e2e`     | Desktop/mobile Playwright E2E    |
-| `npm run lint`         | ESLint frontend-кода             |
-| `npm run format`       | Форматирование Prettier          |
-| `npm run format:check` | Проверка форматирования          |
-| `npm run typecheck`    | Strict TypeScript                |
-| `npm run build`        | Production-сборка                |
-| `npm run check`        | Полный quality gate              |
-| `npm run dev:full`     | Frontend + API + ML              |
-| `npm run test:node`    | Серверные тесты                  |
-| `npm run test:ml`      | ML-тесты                         |
+| Команда                | Назначение                     |
+| ---------------------- | ------------------------------ |
+| `npm run dev`          | Frontend-demo без бэкенда      |
+| `npm run dev:api`      | Frontend для подключения к API |
+| `npm run test:client`  | Клиентские поведенческие тесты |
+| `npm run test:e2e`     | Desktop/mobile Playwright E2E  |
+| `npm run lint`         | ESLint frontend-кода           |
+| `npm run format`       | Форматирование Prettier        |
+| `npm run format:check` | Проверка форматирования        |
+| `npm run typecheck`    | Strict TypeScript              |
+| `npm run build`        | Production frontend-demo       |
+| `npm run build:api`    | Production frontend для API    |
+| `npm run check`        | Полный quality gate            |
+| `npm run dev:full`     | Frontend + API + ML            |
+| `npm run test:node`    | Серверные тесты                |
+| `npm run test:ml`      | ML-тесты                       |
 
 ---
 
