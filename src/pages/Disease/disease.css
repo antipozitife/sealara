@@ -40,8 +40,8 @@
 
 .disease-section {
   margin-top: 22px;
-  height: 240px;
-  overflow: hidden;
+  height: auto;
+  overflow: visible;
 }
 
 .disease-section--lead {
@@ -50,7 +50,7 @@
 
 .disease-section--definition,
 .disease-section--about {
-  height: 360px;
+  min-height: 360px;
 }
 
 .disease-section h2 {
@@ -71,13 +71,8 @@
 }
 
 .disease-body--clamped {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 8;
-  line-clamp: 8;
-  max-height: calc(8 * 1lh);
+  overflow: visible;
+  max-height: none;
 }
 
 .disease-symptoms-list {
@@ -87,7 +82,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 8px 22px;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .disease-symptoms-list li {
@@ -97,13 +92,7 @@
   line-height: 1.58;
   font-size: 1.02rem;
   word-break: break-word;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  max-height: calc(2 * 1lh);
+  overflow: visible;
 }
 
 .disease-symptoms-list li::before {
@@ -166,12 +155,6 @@
     width: 100%;
     max-width: 420px;
     height: auto;
-  }
-
-  .disease-body--clamped {
-    -webkit-line-clamp: 10;
-    line-clamp: 10;
-    max-height: calc(10 * 1lh);
   }
 
   .disease-symptoms-list {

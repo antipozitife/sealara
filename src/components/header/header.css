@@ -2,7 +2,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  min-height: 132px;
+  min-height: 152px;
   margin-bottom: 48px;
 }
 
@@ -32,7 +32,7 @@
   margin-left: clamp(-118px, -6vw, -34px);
   margin-top: -20px;
   font-weight: 800;
-  font-size: 2.08rem;
+  font-size: 2.45rem;
   color: #243056;
   text-decoration: none;
 }
@@ -40,7 +40,7 @@
 .site-logo-img {
   display: block;
   width: auto;
-  height: 152px;
+  height: 176px;
   max-width: min(360px, 58vw);
   object-fit: contain;
   flex-shrink: 0;
@@ -227,11 +227,11 @@
     grid-column: 1;
     justify-self: start;
     margin-left: 0;
-    font-size: 1.42rem;
+    font-size: 1.62rem;
   }
 
   .site-logo-img {
-    height: 72px;
+    height: 88px;
     max-width: min(240px, 62vw);
   }
 

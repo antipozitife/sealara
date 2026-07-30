@@ -114,8 +114,18 @@
 
 .profile-row {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(12px, 3vw, 32px);
+  align-items: end;
+}
+
+.profile-row > label {
+  width: 100%;
+  min-width: 0;
+}
+
+.profile-row input {
+  width: 100%;
 }
 
 .profile-fields input[type="text"],
@@ -191,4 +201,10 @@
   background: rgba(255, 255, 255, 0.72);
   color: #4d4aa2;
   border: 1px solid rgba(77, 74, 162, 0.25);
+}
+
+@media (max-width: 640px) {
+  .profile-row:not(.profile-gender) {
+    grid-template-columns: 1fr;
+  }
 }

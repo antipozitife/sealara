@@ -38,10 +38,11 @@
   align-items: center;
   justify-content: center;
   min-height: 58px;
-  padding: 0 28px;
+  padding: 0 clamp(16px, 2.2vw, 28px);
   border-radius: 999px;
   font-weight: 700;
-  font-size: clamp(1.12rem, 0.55rem + 1.4vw, 1.32rem);
+  font-size: clamp(0.96rem, 0.7rem + 0.85vw, 1.26rem);
+  white-space: nowrap;
   transition: 0.2s ease;
 }
 
@@ -188,6 +189,21 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
+  clip-path: inset(0 0 18% 0);
+}
+
+.speech-bubble::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  right: 23%;
+  bottom: 13%;
+  width: 24px;
+  height: 24px;
+  border-right: 2px solid #5d2d79;
+  border-bottom: 2px solid #5d2d79;
+  background: #ffffff;
+  transform: rotate(45deg);
 }
 
 .speech-bubble-cloud-fill {
@@ -214,7 +230,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  transform: translateY(-1rem);
+  transform: translateY(calc(-1rem + 10px));
 }
 
 .speech-bubble-content span {
@@ -519,12 +535,12 @@
   position: relative;
   z-index: 2;
   align-self: center;
-  justify-self: end;
+  justify-self: center;
   /* Заходим в колонку овала: иначе тюлень физически не пересекается с фиолетовым фоном */
   width: min(calc(100% + clamp(100px, 22vw, 260px)), min(720px, 92vw));
   height: min(560px, 88vw);
   min-height: min(420px, 72vw);
-  margin: 0 clamp(-200px, -16vw, -100px) 0 0;
+  margin: 0;
   overflow: visible;
 }
 
@@ -555,7 +571,7 @@
   width: calc(var(--cta-circle) * 2.76 * 0.67 * 1.2 * 1.15);
   height: auto;
   max-height: none;
-  transform: translate(calc(-50% + 20% + 50% - clamp(6px, 1.1vw, 14px) - clamp(88px, 10.8vw, 184px)), -48%);
+  transform: translate(-50%, -48%);
   transform-origin: 50% 68%;
   object-fit: contain;
   object-position: 50% 100%;
@@ -587,9 +603,8 @@
   height: 100%;
   max-height: min(520px, 88vh);
   border-radius: 50%;
-  background: linear-gradient(180deg, rgba(120, 27, 161, 0.36), rgba(73, 114, 255, 0.38));
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow);
+  background: transparent;
+  isolation: isolate;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -597,6 +612,18 @@
   justify-content: center;
   padding: clamp(28px, 4.5vw, 52px) clamp(22px, 4.5vw, 56px);
   transform: translate(33.333%, -50%);
+}
+
+.cta-oval::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(120, 27, 161, 0.36), rgba(73, 114, 255, 0.38));
+  box-shadow: var(--shadow);
+  transform: scaleX(3);
 }
 
 .cta-oval-inner {
@@ -740,7 +767,7 @@
 
   .speech-bubble-content {
     padding: 10px 18px 58px 20px;
-    transform: translateY(-0.35rem);
+    transform: translateY(calc(-0.35rem + 10px));
   }
 
   .speech-bubble-content span {
@@ -766,7 +793,7 @@
 
   .cta-seal-happy {
     width: calc(var(--cta-circle) * 2.76 * 0.67 * 1.2 * 1.15);
-    transform: translate(calc(-50% + 20% + 50% - 6px - clamp(76px, 9.2vw, 142px)), -44%);
+    transform: translate(-50%, -44%);
   }
 
   .image-placeholder.large {
