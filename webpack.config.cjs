@@ -45,7 +45,7 @@ module.exports = (_, argv = {}) => {
       new webpack.DefinePlugin({
         __SEALARA_STANDALONE__: JSON.stringify(process.env.SEALARA_STANDALONE === "1"),
         __SEALARA_FRONTEND_DEMO__: JSON.stringify(
-          process.env.SEALARA_FRONTEND_DEMO === "1" || process.env.SEALARA_STANDALONE === "1",
+          process.env.SEALARA_FRONTEND_DEMO !== "0" || process.env.SEALARA_STANDALONE === "1",
         ),
       }),
       new HtmlWebpackPlugin({

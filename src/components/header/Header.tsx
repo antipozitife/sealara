@@ -13,7 +13,7 @@ const NAV_ITEMS = [
 
 export const Header = () => {
   const location = useLocation();
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(Boolean(isFrontendDemo));
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
