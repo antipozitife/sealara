@@ -1,6 +1,7 @@
 .medical-notice {
   display: grid;
   gap: 8px;
+  margin: 0 0 28px;
   padding: 16px 18px;
   border: 1px solid rgba(180, 83, 9, 0.3);
   border-radius: 16px;
@@ -19,6 +20,6 @@
 }
 
 .medical-notice--compact {
-  margin-top: 18px;
+  margin: 18px 0 0;
   font-size: 0.9rem;
 }

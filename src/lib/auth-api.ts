@@ -94,6 +94,7 @@ export type Appointment = {
 
 const CSRF_COOKIE_NAME = "sealara_csrf";
 const CSRF_HEADER_NAME = "x-csrf-token";
+const IS_STANDALONE = typeof __SEALARA_STANDALONE__ !== "undefined" && __SEALARA_STANDALONE__;
 
 function getCookie(name: string): string {
   if (typeof document === "undefined") return "";
@@ -190,6 +191,7 @@ export function me() {
  * Проверка сессии без 401 в Network (эндпоинт `/api/auth/session` всегда отвечает 200).
  */
 export async function meOptional(): Promise<AuthResponse | null> {
+  if (IS_STANDALONE) return null;
   const response = await fetch("/api/auth/session", {
     credentials: "include",
     headers: { Accept: "application/json" },

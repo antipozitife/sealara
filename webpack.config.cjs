@@ -1,4 +1,5 @@
 const path = require("path");
+const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = (_, argv = {}) => {
@@ -41,6 +42,9 @@ module.exports = (_, argv = {}) => {
       ],
     },
     plugins: [
+      new webpack.DefinePlugin({
+        __SEALARA_STANDALONE__: JSON.stringify(process.env.SEALARA_STANDALONE === "1"),
+      }),
       new HtmlWebpackPlugin({
         template: "./index.html",
         minify: isProduction

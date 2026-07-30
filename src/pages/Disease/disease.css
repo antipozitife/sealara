@@ -67,6 +67,7 @@
   font-size: 1.02rem;
   word-break: break-word;
   overflow-wrap: break-word;
+  text-indent: 2em;
 }
 
 .disease-body--clamped {
@@ -114,42 +115,41 @@
 }
 
 .disease-definition-layout {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: flex-start;
   gap: 18px;
 }
 
 .disease-definition-image {
-  width: 560px;
+  width: 100%;
   height: 315px;
   object-fit: cover;
   border-radius: 16px;
   border: 1px solid rgba(95, 28, 135, 0.14);
   background: rgba(255, 255, 255, 0.55);
-  flex-shrink: 0;
 }
 
 .disease-about-layout {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   align-items: flex-start;
   gap: 18px;
 }
 
 .disease-about-seal {
-  width: 420px;
+  width: 100%;
   height: 315px;
   object-fit: contain;
-  margin-top: 18px;
-  flex-shrink: 0;
 }
 
 @media (max-width: 980px) {
   .disease-definition-layout {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
   .disease-about-layout {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 
   .disease-section {

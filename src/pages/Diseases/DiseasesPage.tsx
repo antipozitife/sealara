@@ -61,20 +61,34 @@ export const DiseasesPage: React.FC = () => {
           {filteredDiseases.map((disease) => {
             const imageSrc = getImageSrc(disease.raw);
             return (
-              <article key={disease.id} className="disease-card">
-                <div className="disease-card-image-slot">
-                  {imageSrc ? (
-                    <img className="disease-card-image" src={imageSrc} alt={`Иллюстрация: ${disease.name}`} />
-                  ) : (
-                    <div className="disease-card-image disease-card-image--placeholder" aria-hidden="true" />
-                  )}
-                </div>
-                <h2>{disease.name}</h2>
-                <p>{disease.definition}</p>
-                <Link className="disease-card-link" to={`/disease/${disease.id}`}>
-                  открыть карточку
-                </Link>
-              </article>
+              <Link
+                key={disease.id}
+                className="disease-card-link"
+                to={`/disease/${disease.id}`}
+                aria-label={`${disease.name}: открыть карточку`}
+              >
+                <article className="disease-card">
+                  <div className="disease-card-image-slot">
+                    {imageSrc ? (
+                      <img
+                        className="disease-card-image"
+                        src={imageSrc}
+                        alt={`Иллюстрация: ${disease.name}`}
+                      />
+                    ) : (
+                      <div
+                        className="disease-card-image disease-card-image--placeholder"
+                        aria-hidden="true"
+                      />
+                    )}
+                  </div>
+                  <h2>{disease.name}</h2>
+                  <p>{disease.definition}</p>
+                  <span className="disease-card-action" aria-hidden="true">
+                    открыть карточку
+                  </span>
+                </article>
+              </Link>
             );
           })}
         </section>
