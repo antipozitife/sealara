@@ -202,7 +202,7 @@ export const DoctorsPage: React.FC = () => {
                   ))}
                 </select>
               </label>
-              <label>
+              <label className="book-form-selected-doctor">
                 Выбранный врач
                 <input
                   className="book-form-doctor-input"
@@ -212,7 +212,7 @@ export const DoctorsPage: React.FC = () => {
                   readOnly
                 />
               </label>
-              <label>
+              <label className="book-form-field">
                 Дата и время
                 {(selectedDoctor?.slots || []).length > 0 ? (
                   <select
@@ -245,7 +245,7 @@ export const DoctorsPage: React.FC = () => {
                   />
                 )}
               </label>
-              <label>
+              <label className="book-form-field">
                 Причина обращения
                 <textarea
                   value={reason}

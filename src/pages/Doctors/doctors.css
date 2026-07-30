@@ -80,6 +80,17 @@
   font-size: 14px;
 }
 
+.book-form-field {
+  width: 100%;
+}
+
+.book-form-field > input,
+.book-form-field > select,
+.book-form-field > textarea {
+  inline-size: 100%;
+  max-inline-size: none;
+}
+
 .book-form input,
 .book-form textarea,
 .book-form select {
@@ -152,6 +163,10 @@
     display: none;
   }
 
+  .book-form .book-form-selected-doctor {
+    display: none;
+  }
+
   .book-form button {
     min-height: 52px;
     font-size: 1.12rem;
@@ -169,7 +184,7 @@
   }
 
   .book-form label {
-    width: 100%;
+    width: min(100%, 560px);
     align-items: center;
     text-align: center;
   }
@@ -179,7 +194,7 @@
   .book-form select {
     display: block;
     width: 100%;
-    max-width: 560px;
+    max-width: none;
     min-width: 0;
     justify-self: center;
     text-align: center;
