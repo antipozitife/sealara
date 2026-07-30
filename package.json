@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "webpack serve --config webpack.config.cjs --mode development",
     "dev:standalone": "SEALARA_STANDALONE=1 webpack serve --config webpack.config.cjs --mode development",
+    "dev:frontend-demo": "SEALARA_FRONTEND_DEMO=1 webpack serve --config webpack.config.cjs --mode development",
     "dev:full": "npm run sync:diseases && concurrently -k -n ML,API,WEB \"npm run ml:serve\" \"npm run server\" \"npm run dev\"",
     "server": "node server/index.cjs",
     "ml:install": "python3 -m pip install -r ml-service/requirements.txt",
@@ -31,6 +32,7 @@
     "build": "webpack --config webpack.config.cjs --mode production",
     "preview": "webpack serve --config webpack.config.cjs --mode production",
     "preview:standalone": "SEALARA_STANDALONE=1 webpack serve --config webpack.config.cjs --mode production",
+    "preview:frontend-demo": "SEALARA_FRONTEND_DEMO=1 webpack serve --config webpack.config.cjs --mode production",
     "generate:diseases": "node scripts/generate-diseases-data.cjs && npm run sync:diseases",
     "generate:why-carousel": "node scripts/generate-why-carousel-data.cjs",
     "optimize:images": "node scripts/optimize-images.cjs"

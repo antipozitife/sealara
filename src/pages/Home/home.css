@@ -214,7 +214,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  transform: translateY(-2rem);
+  transform: translateY(-1.5rem);
 }
 
 .speech-bubble-content span {

@@ -95,6 +95,50 @@ export type Appointment = {
 const CSRF_COOKIE_NAME = "sealara_csrf";
 const CSRF_HEADER_NAME = "x-csrf-token";
 const IS_STANDALONE = typeof __SEALARA_STANDALONE__ !== "undefined" && __SEALARA_STANDALONE__;
+export const isFrontendDemo =
+  IS_STANDALONE || (typeof __SEALARA_FRONTEND_DEMO__ !== "undefined" && __SEALARA_FRONTEND_DEMO__);
+
+let demoProfile: UserProfile = {
+  surname: "Демонстрационный",
+  firstName: "Пользователь",
+  middleName: "",
+  birthDate: "01.01.1995",
+  gender: "female",
+  phone: "+7 900 000-00-00",
+  region: "Санкт-Петербург",
+};
+
+const demoUser = (): AuthUser => ({
+  id: "frontend-demo-user",
+  email: "demo@sealara.local",
+  name: "Демо-профиль",
+  createdAt: "2026-01-01T00:00:00.000Z",
+  profile: demoProfile,
+  recentQueries: ["Головная боль и слабость", "Насморк и чихание", "Кашель"],
+});
+
+const demoPrediction: DiagnosisPrediction = {
+  id: 31,
+  name: "Аллергический ринит",
+  score: 0.78,
+  probability: 0.74,
+  personalization: 0.04,
+  definition: "Демонстрационное справочное совпадение по введённым наблюдениям.",
+  specialist: "Аллерголог | Терапевт",
+};
+
+let demoAppointments: Appointment[] = [
+  {
+    id: "demo-appointment-1",
+    doctorId: "demo-doctor-1",
+    doctorName: "Смирнова Анна Викторовна",
+    specialization: "Терапевт",
+    startsAt: "2026-08-05T10:30:00.000Z",
+    reason: "Демонстрационная запись",
+    status: "подтверждена",
+    source: "frontend-demo",
+  },
+];
 
 function getCookie(name: string): string {
   if (typeof document === "undefined") return "";
@@ -159,6 +203,7 @@ export function register(payload: {
   region: string;
   password: string;
 }) {
+  if (isFrontendDemo) return Promise.resolve({ user: demoUser() });
   return requestJson<AuthResponse>("/api/auth/register", {
     method: "POST",
     body: JSON.stringify(payload),
@@ -166,6 +211,7 @@ export function register(payload: {
 }
 
 export function detectRegionByPhone(payload: { phone: string }) {
+  if (isFrontendDemo) return Promise.resolve({ region: "Санкт-Петербург" });
   return requestJson<{ region: string }>("/api/auth/detect-region", {
     method: "POST",
     body: JSON.stringify(payload),
@@ -173,6 +219,7 @@ export function detectRegionByPhone(payload: { phone: string }) {
 }
 
 export function login(payload: { email: string; password: string }) {
+  if (isFrontendDemo) return Promise.resolve({ user: demoUser() });
   return requestJson<AuthResponse>("/api/auth/login", {
     method: "POST",
     body: JSON.stringify(payload),
@@ -180,10 +227,12 @@ export function login(payload: { email: string; password: string }) {
 }
 
 export function logout() {
+  if (isFrontendDemo) return Promise.resolve({ ok: true });
   return requestJson<{ ok: boolean }>("/api/auth/logout", { method: "POST" });
 }
 
 export function me() {
+  if (isFrontendDemo) return Promise.resolve({ user: demoUser() });
   return requestJson<AuthResponse>("/api/auth/me");
 }
 
@@ -191,7 +240,7 @@ export function me() {
  * Проверка сессии без 401 в Network (эндпоинт `/api/auth/session` всегда отвечает 200).
  */
 export async function meOptional(): Promise<AuthResponse | null> {
-  if (IS_STANDALONE) return null;
+  if (isFrontendDemo) return { user: demoUser() };
   const response = await fetch("/api/auth/session", {
     credentials: "include",
     headers: { Accept: "application/json" },
@@ -212,6 +261,10 @@ export async function meOptional(): Promise<AuthResponse | null> {
 }
 
 export function saveProfile(profile: Partial<UserProfile>) {
+  if (isFrontendDemo) {
+    demoProfile = { ...demoProfile, ...profile };
+    return Promise.resolve({ profile: demoProfile });
+  }
   return requestJson<{ profile: UserProfile }>("/api/profile", {
     method: "PUT",
     body: JSON.stringify(profile),
@@ -230,6 +283,10 @@ export async function uploadAvatar(file: File): Promise<{ profile: UserProfile }
     reader.onerror = () => reject(new Error("Не удалось прочитать файл"));
     reader.readAsDataURL(file);
   });
+  if (isFrontendDemo) {
+    demoProfile = { ...demoProfile, avatarUrl: `data:${mimeType || "image/png"};base64,${data}` };
+    return { profile: demoProfile };
+  }
   return requestJson<{ profile: UserProfile }>("/api/profile/avatar", {
     method: "POST",
     body: JSON.stringify({ data, mimeType }),
@@ -237,6 +294,10 @@ export async function uploadAvatar(file: File): Promise<{ profile: UserProfile }
 }
 
 export function deleteAvatar() {
+  if (isFrontendDemo) {
+    demoProfile = { ...demoProfile, avatarUrl: undefined };
+    return Promise.resolve({ profile: demoProfile });
+  }
   return requestJson<{ profile: UserProfile }>("/api/profile/avatar", {
     method: "DELETE",
   });
@@ -245,16 +306,52 @@ export function deleteAvatar() {
 const diagnosisUrl = (path: string, demo = false) => `/api/diagnosis/${path}${demo ? "?demo=1" : ""}`;
 
 export function diagnosisOptions(demo = false) {
+  if (isFrontendDemo) {
+    return Promise.resolve({ symptoms: ["кашель", "насморк", "чихание", "слабость", "головная боль"] });
+  }
   return requestJson<{ symptoms: string[] }>(diagnosisUrl("options", demo));
 }
 
 export function diagnosisQuestions(demo = false) {
+  if (isFrontendDemo) {
+    return Promise.resolve({
+      questions: [
+        {
+          id: "severity",
+          question: "Насколько выражены симптомы?",
+          type: "single" as const,
+          options: [
+            { value: "mild", label: "Слабо" },
+            { value: "moderate", label: "Умеренно" },
+            { value: "severe", label: "Сильно" },
+          ],
+        },
+        {
+          id: "duration",
+          question: "Как давно появились наблюдения?",
+          type: "single" as const,
+          options: [
+            { value: "today", label: "Сегодня" },
+            { value: "week", label: "В течение недели" },
+          ],
+        },
+      ],
+    });
+  }
   return requestJson<{ questions: DiagnosisQuestion[] }>(diagnosisUrl("questions", demo), {
     cache: "no-store",
   });
 }
 
 export function preliminaryDiagnosis(payload: { answers: Record<string, unknown> }, demo = false) {
+  if (isFrontendDemo) {
+    return Promise.resolve({
+      predictions: [demoPrediction],
+      relevantSymptoms: ["насморк", "чихание"],
+      uncertainty: 0.32,
+      needMoreDetails: true,
+    });
+  }
   return requestJson<PreliminaryDiagnosisResponse>(diagnosisUrl("preliminary", demo), {
     method: "POST",
     body: JSON.stringify(payload),
@@ -270,6 +367,16 @@ export function diagnose(
   },
   demo = false,
 ) {
+  if (isFrontendDemo) {
+    return Promise.resolve({
+      profileUsed: { age: 31, gender: demoProfile.gender, region: demoProfile.region },
+      predictions: [demoPrediction],
+      uncertainty: 0.22,
+      needClarification: false,
+      clarifyingSymptoms: [],
+      modelInfo: { name: "Frontend demo", estimators: 100, strategy: "Локальные демонстрационные данные" },
+    });
+  }
   return requestJson<DiagnosisResponse>(diagnosisUrl("predict", demo), {
     method: "POST",
     body: JSON.stringify(payload),
@@ -277,6 +384,30 @@ export function diagnose(
 }
 
 export function listDoctors(params?: { region?: string; specialization?: string }) {
+  if (isFrontendDemo) {
+    return Promise.resolve({
+      source: "frontend-demo",
+      mode: "demo",
+      items: [
+        {
+          id: "demo-doctor-1",
+          fullName: "Смирнова Анна Викторовна",
+          specialization: "Терапевт",
+          clinic: "Демонстрационная поликлиника",
+          region: demoProfile.region,
+          nextAvailableAt: "2026-08-05T10:30:00.000Z",
+          slots: [
+            {
+              idAppointment: "demo-slot-1",
+              visitStart: "2026-08-05T10:30:00.000Z",
+              visitEnd: "2026-08-05T11:00:00.000Z",
+              room: "101",
+            },
+          ],
+        },
+      ],
+    });
+  }
   const query = new URLSearchParams();
   if (params?.region) query.set("region", params.region);
   if (params?.specialization) query.set("specialization", params.specialization);
@@ -302,6 +433,20 @@ export function createAppointmentViaSlot(payload: {
   idLpu?: string;
   idPat?: string;
 }) {
+  if (isFrontendDemo) {
+    const appointment: Appointment = {
+      id: `demo-appointment-${demoAppointments.length + 1}`,
+      doctorId: payload.doctorId,
+      doctorName: "Смирнова Анна Викторовна",
+      specialization: "Терапевт",
+      startsAt: payload.startsAt,
+      reason: payload.reason,
+      status: "подтверждена",
+      source: "frontend-demo",
+    };
+    demoAppointments = [appointment, ...demoAppointments];
+    return Promise.resolve({ ok: true, source: "frontend-demo", mode: "demo", appointment });
+  }
   return requestJson<{ ok: boolean; source: string; mode: string; appointment: Appointment | null }>(
     "/api/appointments",
     {
@@ -312,5 +457,8 @@ export function createAppointmentViaSlot(payload: {
 }
 
 export function listMyAppointments() {
+  if (isFrontendDemo) {
+    return Promise.resolve({ source: "frontend-demo", mode: "demo", items: demoAppointments });
+  }
   return requestJson<{ source: string; mode: string; items: Appointment[] }>("/api/appointments/my");
 }

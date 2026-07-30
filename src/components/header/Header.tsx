@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { meOptional } from "../../lib/auth-api";
+import { isFrontendDemo, meOptional } from "../../lib/auth-api";
 import sealaraLogo from "../../images/sealara-logo-192.webp";
 import "./header.css";
 
@@ -51,6 +51,7 @@ export const Header = () => {
         <img className="site-logo-img" src={sealaraLogo} alt="" decoding="async" width="192" height="192" />
         <span className="site-logo-text">Sealara</span>
       </Link>
+      {isFrontendDemo && <span className="frontend-demo-badge">просмотр фронтенда</span>}
 
       <button
         type="button"

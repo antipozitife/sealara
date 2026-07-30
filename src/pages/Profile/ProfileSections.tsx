@@ -8,6 +8,7 @@ function avatarSource(url: string | undefined, failed: boolean): string {
   const clean = url.trim();
   const base = clean.split(/[?#]/)[0].toLowerCase();
   if (base.endsWith(".heic") || base.endsWith(".heif")) return sealSad;
+  if (/^data:image\//i.test(clean)) return clean;
   if (/^https?:\/\//i.test(clean)) return clean;
   return clean.startsWith("/") ? clean : `/${clean}`;
 }
