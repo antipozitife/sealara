@@ -187,9 +187,25 @@ export const DoctorsPage: React.FC = () => {
           <article className="doctors-panel">
             <h2>Оформить запись</h2>
             <form onSubmit={onBook} className="book-form">
+              <label className="book-form-doctor-select">
+                Выберите врача
+                <select
+                  value={selectedDoctorId}
+                  onChange={(event) => setSelectedDoctorId(event.target.value)}
+                  required
+                >
+                  <option value="">Выберите врача</option>
+                  {doctors.map((doctor) => (
+                    <option key={doctor.id} value={doctor.id}>
+                      {doctor.fullName} — {doctor.specialization}
+                    </option>
+                  ))}
+                </select>
+              </label>
               <label>
                 Выбранный врач
                 <input
+                  className="book-form-doctor-input"
                   value={
                     selectedDoctor ? `${selectedDoctor.fullName} (${selectedDoctor.specialization})` : ""
                   }
