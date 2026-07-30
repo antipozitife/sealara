@@ -54,7 +54,7 @@ export const Header = () => {
 
       <button
         type="button"
-        className="site-menu-toggle"
+        className={`site-menu-toggle${menuOpen ? " site-menu-toggle--open" : ""}`}
         aria-expanded={menuOpen}
         aria-controls="site-navigation"
         aria-label={menuOpen ? "Закрыть меню" : "Открыть меню"}
