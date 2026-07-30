@@ -161,6 +161,7 @@
   }
 
   .book-form {
+    width: 100%;
     justify-items: center;
   }
 
@@ -173,7 +174,11 @@
   .book-form input,
   .book-form textarea,
   .book-form select {
-    width: min(100%, 560px);
+    display: block;
+    width: 100%;
+    max-width: 560px;
+    min-width: 0;
+    justify-self: center;
     text-align: center;
   }
 
